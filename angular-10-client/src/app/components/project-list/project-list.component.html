@@ -19,45 +19,46 @@
     </div>
   </div>
   <div class="col-md-6">
-    <h4>Tutorials List</h4>
+    <h4>Projects List</h4>
     <ul class="list-group">
       <li
         class="list-group-item"
-        *ngFor="let tutorial of tutorials; let i = index"
+        *ngFor="let project of projects; let i = index"
         [class.active]="i == currentIndex"
-        (click)="setActiveTutorial(tutorial, i)"
+        (click)="setActiveProject(project, i)"
       >
-        {{ tutorial.title }}
+        {{ project.title }}
       </li>
     </ul>
 
-    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
+    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllProjects()">
       Remove All
     </button>
   </div>
+
   <div class="col-md-6">
-    <div *ngIf="currentTutorial">
-      <h4>Tutorial</h4>
+    <div *ngIf="currentProject">
+      <h4>Project</h4>
       <div>
-        <label><strong>Title:</strong></label> {{ currentTutorial.title }}
+        <label><strong>Title:</strong></label> {{ currentProject.title }}
       </div>
       <div>
         <label><strong>Description:</strong></label>
-        {{ currentTutorial.description }}
+        {{ currentProject.description }}
       </div>
       <div>
         <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
+        {{ currentProject.published ? "Published" : "Pending" }}
       </div>
 
-      <a class="badge badge-warning" routerLink="/tutorials/{{ currentTutorial.id }}">
+      <a class="badge badge-warning" routerLink="/projects/{{ currentProject.id }}">
         Edit
       </a>
     </div>
 
-    <div *ngIf="!currentTutorial">
+    <div *ngIf="!currentProject">
       <br />
-      <p>Please click on a Tutorial...</p>
+      <p>Please click on a Project...</p>
     </div>
   </div>
 </div>

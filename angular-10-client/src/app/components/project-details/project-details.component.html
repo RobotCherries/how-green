@@ -1,6 +1,6 @@
 <div style="width: 400px; margin: auto;">
-  <div *ngIf="currentTutorial" class="edit-form">
-    <h4>Tutorial</h4>
+  <div *ngIf="currentProject" class="edit-form">
+    <h4>Project</h4>
     <form>
       <div class="form-group">
         <label for="title">Title</label>
@@ -8,7 +8,7 @@
           type="text"
           class="form-control"
           id="title"
-          [(ngModel)]="currentTutorial.title"
+          [(ngModel)]="currentProject.title"
           name="title"
         />
       </div>
@@ -18,48 +18,49 @@
           type="text"
           class="form-control"
           id="description"
-          [(ngModel)]="currentTutorial.description"
+          [(ngModel)]="currentProject.description"
           name="description"
         />
       </div>
 
       <div class="form-group">
         <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
+        {{ currentProject.published ? "Published" : "Pending" }}
       </div>
     </form>
 
     <button
-      class="badge badge-primary mr-2"
-      *ngIf="currentTutorial.published"
+      class="btn btn-primary mr-2"
+      *ngIf="currentProject.published"
       (click)="updatePublished(false)"
     >
       UnPublish
     </button>
+
     <button
-      *ngIf="!currentTutorial.published"
-      class="badge badge-primary mr-2"
+      *ngIf="!currentProject.published"
+      class="btn btn-primary mr-2"
       (click)="updatePublished(true)"
     >
       Publish
     </button>
 
-    <button class="badge badge-danger mr-2" (click)="deleteTutorial()">
+    <button class="btn btn-danger mr-2" (click)="deleteProject()">
       Delete
     </button>
 
     <button
       type="submit"
-      class="badge badge-success"
-      (click)="updateTutorial()"
+      class="btn btn-success"
+      (click)="updateProject()"
     >
       Update
     </button>
     <p>{{ message }}</p>
   </div>
 
-  <div *ngIf="!currentTutorial">
+  <div *ngIf="!currentProject">
     <br />
-    <p>Cannot access this Tutorial...</p>
+    <p>Cannot access this Project...</p>
   </div>
 </div>

@@ -12,16 +12,16 @@
     </button>
 
     <!-- Step 2: Add the ngbCollapse directive to the element below. -->
-    <div *ngIf="!isMenuCollapsed" class="collapse navbar-collapse">
+    <div *ngIf="isMenuCollapsed" class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mt-2 mt-lg-0">
         <li class="nav-item" routerLinkActive="active">
           <!-- Step 4: Close the menu when a link is clicked. -->
-          <a class="nav-link" routerLink="/" (click)="isMenuCollapsed = true">Main</a>
+          <a class="nav-link" routerLink="/" (click)="isMenuCollapsed = true">Projects</a>
         </li>
 
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="loginService.isUserLoggedIn.value">
           <!-- Step 4: Close the menu when a link is clicked. -->
-          <a class="nav-link" routerLink="/posts" (click)="isMenuCollapsed = true">Posts</a>
+          <a class="nav-link" routerLink="/add" (click)="isMenuCollapsed = true">Add new</a>
         </li>
 
         <!-- TODO: After implementing auth guards, show conditionally when logged in -->

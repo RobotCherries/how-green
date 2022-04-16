@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/functions";
+
+// Default variable overrides
+$primary: #32c36c;
+$secondary: #253745;
+
+:root {
+  --bs-secondary-rgb: $secondary;
+}
+
+@import "~bootstrap/scss/variables";
+
+$success:    $success;
+$info:       $info;
+$warning:    $warning;
+$danger:     $danger;
+$light:      $light;
+$dark:       $dark;
+
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+);
+
+@import "bootstrap/scss/utilities";
+
+$utilities: map-merge(
+  $utilities, (
+    "border": map-merge(
+      map-get($utilities, "width"),
+      ( responsive: true ),
+    ),
+  )
+);
+
+
+@import "~bootstrap/scss/bootstrap";
+
+// .text-green {
+//   color: #32c36c;
+// }

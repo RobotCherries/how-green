@@ -1,12 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
 var corsOptions = {
   origin: "http://localhost:8081"
 };
+
+// parse cookies
+app.use(cookieParser())
 
 app.use(cors(corsOptions));
 
@@ -24,12 +28,17 @@ db.sequelize.sync();
 //   console.log("Drop and re-sync db.");
 // });
 
-// simple route
+// Routing
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to How Green API." });
 });
 
-require("./app/routes/project.routes")(app);
+const authRoutes = require("./app/routes/auth.routes");
+const projectRoutes = require("./app/routes/project.routes");
+
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
+// require("./app/routes/project.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

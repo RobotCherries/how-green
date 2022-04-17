@@ -1,28 +1,26 @@
-module.exports = app => {
-  const projects = require("../controllers/project.controller.js");
+const projectsController = require("../controllers/project.controller.js");
+const router = require('express').Router()
 
-  var router = require("express").Router();
+// Create a new Project
+router.post("/", projectsController.create);
 
-  // Create a new Project
-  router.post("/", projects.create);
+// Get all Projects
+router.get("/", projectsController.findAll);
 
-  // Retrieve all Projects
-  router.get("/", projects.findAll);
+// Get all published Projects
+router.get("/published", projectsController.findAllPublished);
 
-  // Retrieve all published Projects
-  router.get("/published", projects.findAllPublished);
+// Get a single Project with id
+router.get("/:id", projectsController.findOne);
 
-  // Retrieve a single Project with id
-  router.get("/:id", projects.findOne);
+// Update a Project with id
+router.put("/:id", projectsController.update);
 
-  // Update a Project with id
-  router.put("/:id", projects.update);
+// Delete a Project with id
+router.delete("/:id", projectsController.delete);
 
-  // Delete a Project with id
-  router.delete("/:id", projects.delete);
+// Delete all Projects
+router.delete("/", projectsController.deleteAll);
 
-  // Delete all Projects
-  router.delete("/", projects.deleteAll);
+module.exports = router;
 
-  app.use('/api/projects', router);
-};

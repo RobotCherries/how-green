@@ -5,54 +5,52 @@
     </b>
   </a>
 
-  <div class="d-flex justify-content-between w-sm-100 w-md-100 w-lg-100 w-xl-100">
+  <div class="navbar__main d-flex flex-row-reverse">
+    <p *ngIf="authService.isUserLoggedIn.value" class="my-2 mx-2">
+      Hi {{ authService.userData.value?.name }}
+    </p>
+
     <!-- Step 3: Toggle the value of the property when the toggler button is clicked. -->
-    <button class="navbar-toggler mx-2 my-3" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+    <button class="navbar-toggler mx-2 my-2" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
       &#9776;
     </button>
-
-    <!-- Step 2: Add the ngbCollapse directive to the element below. -->
-    <div *ngIf="isMenuCollapsed" class="collapse navbar-collapse">
-      <ul class="navbar-nav me-auto mt-2 mt-lg-0">
-        <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
-          <!-- Step 4: Close the menu when a link is clicked. -->
-          <a class="nav-link" routerLink="/" (click)="isMenuCollapsed = true">Projects</a>
-        </li>
-
-        <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
-          <!-- Step 4: Close the menu when a link is clicked. -->
-          <a class="nav-link" routerLink="/add" (click)="isMenuCollapsed = true">Add new</a>
-        </li>
-
-        <!-- TODO: After implementing auth guards, show conditionally when logged in -->
-        <li class="nav-item" routerLinkActive="active" *ngIf="false">
-          <!-- Step 4: Close the menu when a link is clicked. -->
-          <a class="nav-link" routerLink="/dashboard" (click)="isMenuCollapsed = true">Dashboard</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="d-flex my-2 ml-auto mr-0">
-      <p *ngIf="authService.isUserLoggedIn.value" class="my-2 mx-3">
-        Hi {{ authService.userData.value?.name }}
-      </p>
-
-      <button
-        *ngIf="!authService.isUserLoggedIn.value"
-        class="btn btn-dark my-2 my-sm-0"
-        type="button"
-        routerLink="/login"
-        (click)="isMenuCollapsed = true">
-        Log In
-      </button>
-
-      <button
-        *ngIf="authService.isUserLoggedIn.value"
-        class="btn btn-dark my-2 my-sm-0"
-        type="button"
-        (click)="logout(); isMenuCollapsed = true">
-        Log out
-      </button>
-    </div>
   </div>
+
+  <!-- Step 2: Add the ngbCollapse directive to the element below. -->
+  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+    <ul class="navbar-nav me-auto mt-lg-0 align-items-end">
+      <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
+        <!-- Step 4: Close the menu when a link is clicked. -->
+        <a class="nav-link my-md-2" routerLink="/" (click)="isMenuCollapsed = true">Projects</a>
+      </li>
+
+      <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
+        <!-- Step 4: Close the menu when a link is clicked. -->
+        <a class="nav-link my-md-2" routerLink="/add" (click)="isMenuCollapsed = true">Add new project</a>
+      </li>
+
+      <li class="nav-item" routerLinkActive="active">
+        <!-- Step 4: Close the menu when a link is clicked. -->
+        <div class="d-flex my-md-2 ml-auto mr-0">
+          <button
+            *ngIf="!authService.isUserLoggedIn.value"
+            class="btn btn-dark my-2 my-sm-0"
+            type="button"
+            routerLink="/login"
+            (click)="isMenuCollapsed = true">
+            Log In
+          </button>
+
+          <button
+            *ngIf="authService.isUserLoggedIn.value"
+            class="btn btn-dark my-2 my-sm-0"
+            type="button"
+            (click)="logout(); isMenuCollapsed = true">
+            Log out
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
 </nav>

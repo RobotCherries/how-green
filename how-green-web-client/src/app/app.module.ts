@@ -18,6 +18,7 @@ import { CoreModule } from './core/core.module';
     FormsModule,
     HttpClientModule,
     CoreModule,
+
   ],
   declarations: [
     AppComponent,

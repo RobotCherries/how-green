@@ -1,0 +1,8 @@
+.navbar__main {
+  @media screen and (min-width: 425px) {
+    width: calc(100% - 420px);
+  }
+  @media screen and (max-width: 425px) {
+    width: calc(100% - 150px);
+  }
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../auth/services/login.service';
+import { AuthService } from './../../auth/services/auth/auth.service';
 
 @Component({
   selector: 'hg-navbar',
@@ -10,7 +10,7 @@ export class NavbarComponent implements OnInit {
 
   public isMenuCollapsed: boolean = true;
 
-  constructor(public loginService: LoginService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }

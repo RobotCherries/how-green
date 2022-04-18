@@ -1,9 +1,9 @@
-const db = require("../models");
-const Project = db.projects;
-const Op = db.Sequelize.Op;
+import { Request, Response } from "express";
+import { getRepository } from 'typeorm';
+import { Project } from '../entities/project.entity';
 
 // Create and Save a new Project
-exports.create = (req, res) => {
+export const Create = (req: Request, res: Response) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
@@ -14,17 +14,20 @@ exports.create = (req, res) => {
 
   // Create a Project
   const project = {
+    user_id: 1,
     title: req.body.title,
     description: req.body.description,
     published: req.body.published ? req.body.published : false
   };
 
+  console.log('project', project);
+
   // Save Project in the database
-  Project.create(project)
-    .then(data => {
+  getRepository(Project).save(project)
+    .then((data: any) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Project."
@@ -33,31 +36,36 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Projects from the database.
-exports.findAll = (req, res) => {
+export const FindAll = (req: Request, res: Response) => {
   const title = req.query.title;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  var condition = title ? { title:`%${title}` } : null;
 
-  Project.findAll({ where: condition })
-    .then(data => {
+  getRepository(Project).find({ where: title ? { title: title } : {} })
+    .then((data: any) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving projects."
       });
     });
+
+  // getRepository(Project)
+  //   .createQueryBuilder("project")
+  //   // .where("project.title  like '%' || :title || '%'", { title: title })
+  //   .getMany();
 };
 
 // Find a single Project with an id
-exports.findOne = (req, res) => {
+export const FindOne = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  Project.findByPk(id)
-    .then(data => {
+  getRepository(Project).findOne(id)
+    .then((data: any) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message: "Error retrieving Project with id=" + id
       });
@@ -65,13 +73,11 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Project by the id in the request
-exports.update = (req, res) => {
+export const Update = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  Project.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
+  getRepository(Project).update(id, req.body)
+    .then((num: any) => {
       if (num == 1) {
         res.send({
           message: "Project was updated successfully."
@@ -82,7 +88,7 @@ exports.update = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message: "Error updating Project with id=" + id
       });
@@ -90,13 +96,11 @@ exports.update = (req, res) => {
 };
 
 // Delete a Project with the specified id in the request
-exports.delete = (req, res) => {
+export const Delete = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  Project.destroy({
-    where: { id: id }
-  })
-    .then(num => {
+  getRepository(Project).delete(id)
+    .then((num: any) => {
       if (num == 1) {
         res.send({
           message: "Project was deleted successfully!"
@@ -107,37 +111,20 @@ exports.delete = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message: "Could not delete Project with id=" + id
       });
     });
 };
 
-// Delete all Projects from the database.
-exports.deleteAll = (req, res) => {
-  Project.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-      res.send({ message: `${nums} Projects were deleted successfully!` });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all projects."
-      });
-    });
-};
-
 // find all published Project
-exports.findAllPublished = (req, res) => {
-  Project.findAll({ where: { published: true } })
-    .then(data => {
+export const FindAllPublished = (req: Request, res: Response) => {
+  getRepository(Project).find({ where: { published: true } })
+    .then((data: any) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err: any) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving projects."

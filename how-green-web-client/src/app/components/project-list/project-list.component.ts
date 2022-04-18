@@ -42,18 +42,6 @@ export class ProjectsListComponent implements OnInit {
     this.currentIndex = index;
   }
 
-  removeAllProjects(): void {
-    this.projectService.deleteAll()
-      .subscribe(
-        response => {
-          console.log(response);
-          this.refreshList();
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
   searchTitle(): void {
     this.projectService.findByTitle(this.title)
       .subscribe(

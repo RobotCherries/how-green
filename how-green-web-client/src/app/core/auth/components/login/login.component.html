@@ -1,6 +1,6 @@
 <div class="login container-fluid bg-light py-2 p-md-5 px-3">
   <div class="form-signin text-center">
-    <form>
+    <form [formGroup]="form">
       <h1 class="h3 mb-4 fw-normal">
         <a class="text-dark text-decoration-none" [routerLink]="'.'"><span>AVD<b>AFA</b></span></a>
       </h1>
@@ -8,11 +8,24 @@
       <h2 class="h3 mb-3 fw-normal">Please sign in</h2>
 
       <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <input
+          type="email"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name@example.com"
+          formControlName="email"
+        >
         <label for="floatingInput">Email address</label>
       </div>
+
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <input
+          type="password"
+          class="form-control"
+          id="floatingPassword"
+          placeholder="Password"
+          formControlName="password"
+        >
         <label for="floatingPassword">Password</label>
       </div>
 
@@ -22,7 +35,13 @@
         </label>
       </div>
 
-      <button class="w-100 btn btn-lg btn-dark" type="submit">Sign in</button>
+      <button
+        class="w-100 btn btn-lg btn-dark"
+        type="submit"
+        (click)="login()"
+      >
+        Sign in
+      </button>
 
       <div class="py-3">
         <a routerLink="/" class="text-muted">Go back</a>

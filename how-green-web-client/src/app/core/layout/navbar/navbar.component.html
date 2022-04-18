@@ -19,7 +19,7 @@
           <a class="nav-link" routerLink="/" (click)="isMenuCollapsed = true">Projects</a>
         </li>
 
-        <li class="nav-item" routerLinkActive="active" *ngIf="loginService.isUserLoggedIn.value">
+        <li class="nav-item" routerLinkActive="active" *ngIf="authService.isUserLoggedIn.value">
           <!-- Step 4: Close the menu when a link is clicked. -->
           <a class="nav-link" routerLink="/add" (click)="isMenuCollapsed = true">Add new</a>
         </li>

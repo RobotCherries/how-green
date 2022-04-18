@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 const baseUrl = 'http://localhost:8080/api/projects';
@@ -29,10 +29,6 @@ export class ProjectService {
 
   delete(id): Observable<any> {
     return this.http.delete(`${baseUrl}/${id}`);
-  }
-
-  deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
   }
 
   findByTitle(title): Observable<any> {

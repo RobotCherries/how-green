@@ -17,7 +17,7 @@ export const Create = (req: Request, res: Response) => {
     userId: req.body.userId,
     title: req.body.title,
     description: req.body.description,
-    published: req.body.published ? req.body.published : false,
+    status: req.body.status ? req.body.status : false,
     score: ''
   };
 
@@ -119,9 +119,9 @@ export const Delete = (req: Request, res: Response) => {
     });
 };
 
-// find all published Project
-export const FindAllPublished = (req: Request, res: Response) => {
-  getRepository(Project).find({ where: { published: true } })
+// find all status Project
+export const FindAllstatus = (req: Request, res: Response) => {
+  getRepository(Project).find({ where: { status: true } })
     .then((data: any) => {
       res.send(data);
     })

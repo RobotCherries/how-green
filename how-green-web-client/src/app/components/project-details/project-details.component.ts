@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
+import { IProject } from 'src/app/shared/interfaces/project.interface';
 
 @Component({
   selector: 'hg-project-details',
@@ -8,7 +9,7 @@ import { ProjectService } from 'src/app/services/project.service';
   styleUrls: ['./project-details.component.css']
 })
 export class ProjectDetailsComponent implements OnInit {
-  currentProject = null;
+  currentProject: IProject = null;
   message = '';
 
   constructor(
@@ -33,17 +34,17 @@ export class ProjectDetailsComponent implements OnInit {
         });
   }
 
-  updatePublished(status): void {
+  updateStatus(status): void {
     const data = {
       title: this.currentProject.title,
       description: this.currentProject.description,
-      published: status
+      status: status
     };
 
     this.projectService.update(this.currentProject.id, data)
       .subscribe(
         response => {
-          this.currentProject.published = status;
+          this.currentProject.status = status;
           console.log(response);
         },
         error => {

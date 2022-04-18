@@ -3,7 +3,7 @@
 In this project, I will show you how to build a full-stack (Angular 10 + Node.js + Express + MySQL) example with a CRUD Application. The back-end server uses Node.js + Express for REST APIs, front-end side is an Angular App with HTTPClient.
 
 We will build a full-stack Project Application in that:
-- Project has id, title, description, published status.
+- Project has id, title, description, status status.
 - User can create, retrieve, update, delete Projects.
 - There is a search box for finding Projects by title.
 

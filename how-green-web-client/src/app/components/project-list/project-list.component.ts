@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/services/project.service';
+import { IProject } from 'src/app/shared/interfaces/project.interface';
 
 @Component({
   selector: 'hg-project-list',
@@ -8,9 +9,9 @@ import { ProjectService } from 'src/app/services/project.service';
 })
 export class ProjectsListComponent implements OnInit {
 
-  projects: any;
-  currentProject = null;
-  currentIndex = -1;
+  projects: IProject[] = [];
+  currentProject = this.projects[0];
+  currentIndex = 0;
   title = '';
 
   constructor(private projectService: ProjectService) { }
@@ -44,13 +45,14 @@ export class ProjectsListComponent implements OnInit {
 
   searchTitle(): void {
     this.projectService.findByTitle(this.title)
-      .subscribe(
-        data => {
+      .subscribe({
+        next: data => {
           this.projects = data;
           console.log(data);
         },
-        error => {
+        error: error => {
           console.log(error);
-        });
+        }
+      });
   }
 }

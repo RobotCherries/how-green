@@ -18,7 +18,7 @@ export class Project {
     score?: string;
 
     @Column()
-    published!: boolean;
+    status!: boolean;
 
     @CreateDateColumn()
     created_at!: Date;

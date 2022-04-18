@@ -25,7 +25,7 @@
 
       <div class="form-group">
         <label><strong>Status:</strong></label>
-        {{ currentProject.published ? "Published" : "Pending" }}
+        {{ currentProject.status ? "status" : "Pending" }}
       </div>
 
       <div class="form-group">
@@ -36,16 +36,16 @@
 
     <button
       class="btn btn-primary mr-2"
-      *ngIf="currentProject.published"
-      (click)="updatePublished(false)"
+      *ngIf="currentProject.status"
+      (click)="updateStatus(false)"
     >
       UnPublish
     </button>
 
     <button
-      *ngIf="!currentProject.published"
+      *ngIf="!currentProject.status"
       class="btn btn-primary mr-2"
-      (click)="updatePublished(true)"
+      (click)="updateStatus(true)"
     >
       Publish
     </button>

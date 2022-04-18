@@ -12,7 +12,7 @@ export class AddProjectComponent implements OnInit {
   project = {
     title: '',
     description: '',
-    published: false,
+    status: false,
     userId: this.getUserId(),
   };
 
@@ -57,7 +57,7 @@ export class AddProjectComponent implements OnInit {
     this.project = {
       title: '',
       description: '',
-      published: false,
+      status: false,
       userId: this.getUserId()
     };
   }

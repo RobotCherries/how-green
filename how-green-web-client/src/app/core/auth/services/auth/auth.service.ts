@@ -6,11 +6,12 @@ import { environment } from 'src/environments/environment';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
 import { IUser } from './../../../../shared/interfaces/user.interface';
 
+const apiBaseUrl: string = environment.apiEndpoint;
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-public apiBaseUrl: string = environment.apiEndpoint;
 public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 public userData: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
 
@@ -24,7 +25,7 @@ constructor(
 
   register(userCredentials: {}): void {
     this.httpClient
-      .post(`${this.apiBaseUrl}/auth/register`, userCredentials, { withCredentials: true })
+      .post(`${apiBaseUrl}/auth/register`, userCredentials, { withCredentials: true })
       .subscribe(() => {
         this.router.navigate(['/login']);
       });
@@ -32,7 +33,7 @@ constructor(
 
   login(userCredentials: {}): void {
     this.httpClient
-      .post(`${this.apiBaseUrl}/auth/login`, userCredentials, { withCredentials: true })
+      .post(`${apiBaseUrl}/auth/login`, userCredentials, { withCredentials: true })
       .subscribe((res: any) => {
         AuthInterceptor.accessToken = res.token;
 
@@ -48,7 +49,7 @@ constructor(
 
   getUserData(): void {
     this.httpClient
-      .get(`${this.apiBaseUrl}/auth/user`, { withCredentials: true })
+      .get(`${apiBaseUrl}/auth/user`, { withCredentials: true })
       .subscribe((data: IUser) => {
         console.log('data', data);
         localStorage.setItem('userData', JSON.stringify(data));
@@ -68,7 +69,7 @@ constructor(
 
   logout(): void {
     this.httpClient
-      .post(`${this.apiBaseUrl}/auth/logout`, {}, { withCredentials: true })
+      .post(`${apiBaseUrl}/auth/logout`, {}, { withCredentials: true })
       .subscribe(res => {
         console.log('res', res);
         AuthInterceptor.accessToken = '';

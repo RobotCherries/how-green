@@ -5,7 +5,7 @@ import { Create } from '../controllers/project.controller';
 export const projectRoutes = (router: Router) => {
     router.post("/", Create);
     router.get("/", projectController.FindAll);
-    router.get("/status", projectController.FindAllstatus);
+    router.get("/status", projectController.FindAllStatus);
     router.get("/:id", projectController.FindOne);
     router.put("/:id", projectController.Update);
     router.delete("/:id", projectController.Delete);

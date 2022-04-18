@@ -1,37 +1,39 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { IProjectSearchCriteria } from '../shared/interfaces/project-search-criteria.interface';
 
-const baseUrl = 'http://localhost:8080/api/projects';
+const apiBaseUrl: string = `${environment.apiEndpoint}/projects/`;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getAll(): Observable<any> {
-    return this.http.get(baseUrl);
+  getAll(userId: number): Observable<any> {
+    return this.httpClient.get(`${apiBaseUrl}?userId=${userId}`);
   }
 
   get(id): Observable<any> {
-    return this.http.get(`${baseUrl}/${id}`);
+    return this.httpClient.get(`${apiBaseUrl}/${id}`);
   }
 
   create(data): Observable<any> {
-    return this.http.post(baseUrl, data);
+    return this.httpClient.post(`${apiBaseUrl}/create`, data);
   }
 
   update(id, data): Observable<any> {
-    return this.http.put(`${baseUrl}/${id}`, data);
+    return this.httpClient.put(`${apiBaseUrl}/${id}`, data);
   }
 
   delete(id): Observable<any> {
-    return this.http.delete(`${baseUrl}/${id}`);
+    return this.httpClient.delete(`${apiBaseUrl}/${id}`);
   }
 
-  findByTitle(title): Observable<any> {
-    return this.http.get(`${baseUrl}?title=${title}`);
+  findBy(criteria: IProjectSearchCriteria): Observable<any> {
+    return this.httpClient.get(`${apiBaseUrl}?userId=${criteria.userId}&title=${criteria.title}`);
   }
 }

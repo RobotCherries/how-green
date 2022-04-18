@@ -5,44 +5,45 @@ import { Project } from '../entities/project.entity';
 // Create and Save a new Project
 export const Create = (req: Request, res: Response) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.title || !req.body.userId) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  // Create a Project
-  const project = {
-    userId: req.body.userId,
-    title: req.body.title,
-    description: req.body.description,
-    status: req.body.status ? req.body.status : false,
-    score: ''
-  };
-
-  console.log('project', project);
-
-  // Save Project in the database
-  getRepository(Project).save(project)
-    .then((data: any) => {
-      res.send(data);
+  getRepository(Project)
+    .createQueryBuilder()
+    .insert()
+    .into(Project)
+    .values({
+      title: req.body.title,
+      description: req.body.description,
+      score: req.body.score ? req.body.score : '',
+      status: req.body.status ? req.body.status : false,
+      user: {
+        id: req.body.userId
+      }
     })
-    .catch((err: any) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Project."
-      });
-    });
+    .execute();
 };
 
 // Retrieve all Projects from the database.
 export const FindAll = (req: Request, res: Response) => {
-  const title = req.query.title;
-  var condition = title ? { title:`%${title}` } : null;
+  // if (!req.body.userId) {
+  //   res.status(400).send({
+  //     message: "UserId can not be empty!"
+  //   });
+  //   return;
+  // }
 
-  getRepository(Project).find({ where: title ? { title: title } : {} })
+  const title = req.query.title;
+  console.log('res', req.query);
+  const condition = title ? { title: title, user: req.query.userId } : { user: req.query.userId };
+
+  getRepository(Project).find({ where: condition })
     .then((data: any) => {
+      console.log('res data', data);
       res.send(data);
     })
     .catch((err: any) => {
@@ -51,11 +52,6 @@ export const FindAll = (req: Request, res: Response) => {
           err.message || "Some error occurred while retrieving projects."
       });
     });
-
-  // getRepository(Project)
-  //   .createQueryBuilder("project")
-  //   // .where("project.title  like '%' || :title || '%'", { title: title })
-  //   .getMany();
 };
 
 // Find a single Project with an id
@@ -120,7 +116,7 @@ export const Delete = (req: Request, res: Response) => {
 };
 
 // find all status Project
-export const FindAllstatus = (req: Request, res: Response) => {
+export const FindAllStatus = (req: Request, res: Response) => {
   getRepository(Project).find({ where: { status: true } })
     .then((data: any) => {
       res.send(data);

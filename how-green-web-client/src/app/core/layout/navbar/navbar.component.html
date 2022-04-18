@@ -5,9 +5,9 @@
     </b>
   </a>
 
-  <div class="navbar__main d-flex flex-row-reverse">
+  <div class="navbar__main d-flex align-items-center justify-content-end">
     <p *ngIf="authService.isUserLoggedIn.value" class="my-2 mx-2">
-      Hi {{ authService.userData.value?.name }}
+      Hi {{ authService.userData.value?.name }}<span class="d-none d-md-inline"> |</span>
     </p>
 
     <!-- Step 3: Toggle the value of the property when the toggler button is clicked. -->

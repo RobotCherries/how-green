@@ -9,9 +9,9 @@ export const routes = (router: Router) => {
     router.post('/api/auth/refresh', authController.Refresh);
     router.post('/api/auth/logout', authController.Logout);
 
-    router.post('/api/projects/', projectController.Create);
+    router.post('/api/projects/create', projectController.Create);
     router.get('/api/projects/', projectController.FindAll);
-    router.get('/api/projects/status', projectController.FindAllstatus);
+    router.get('/api/projects/status', projectController.FindAllStatus);
     router.get('/api/projects/:id', projectController.FindOne);
     router.put('/api/projects/:id', projectController.Update);
     router.delete('/api/projects/:id', projectController.Delete);

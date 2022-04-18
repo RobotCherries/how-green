@@ -1,12 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Project {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    userId!: number;
+    @ManyToOne(type => User)
+    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+    user!: User;
 
     @Column()
     title!: string;

@@ -48,7 +48,7 @@ export const Login = async (req: Request, res: Response) => {
     expired_at.setDate(expired_at.getDate() + 7);
 
     await getRepository(Token).save({
-        user_id: user.id,
+        userId: user.id,
         token: refreshToken,
         expired_at
     });
@@ -105,7 +105,7 @@ export const Refresh = async (req: Request, res: Response) => {
         }
 
         const dbToken = await getRepository(Token).findOne({
-            user_id: payload.id,
+            userId: payload.id,
             expired_at: MoreThanOrEqual(new Date())
         });
 

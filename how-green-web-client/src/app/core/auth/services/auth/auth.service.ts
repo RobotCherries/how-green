@@ -22,6 +22,14 @@ constructor(
   this.refreshUserState();
 }
 
+  register(userCredentials: {}): void {
+    this.httpClient
+      .post(`${this.apiBaseUrl}/auth/register`, userCredentials, { withCredentials: true })
+      .subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+  }
+
   login(userCredentials: {}): void {
     this.httpClient
       .post(`${this.apiBaseUrl}/auth/login`, userCredentials, { withCredentials: true })

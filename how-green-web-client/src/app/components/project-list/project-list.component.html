@@ -40,6 +40,10 @@
           <label><strong>Status:</strong></label>
           {{ currentProject.published ? "Published" : "Pending" }}
         </div>
+        <div>
+          <label><strong>Score:</strong></label>
+          {{ currentProject.score }}
+        </div>
 
         <a class="badge badge-warning" routerLink="/projects/{{ currentProject.id }}">
           Edit

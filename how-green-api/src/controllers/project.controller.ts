@@ -14,10 +14,11 @@ export const Create = (req: Request, res: Response) => {
 
   // Create a Project
   const project = {
-    user_id: 1,
+    userId: req.body.userId,
     title: req.body.title,
     description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    published: req.body.published ? req.body.published : false,
+    score: ''
   };
 
   console.log('project', project);

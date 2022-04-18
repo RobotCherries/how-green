@@ -6,13 +6,16 @@ export class Project {
     id!: number;
 
     @Column()
-    user_id!: number;
+    userId!: number;
 
     @Column()
     title!: string;
 
     @Column()
     description!: string;
+
+    @Column()
+    score?: string;
 
     @Column()
     published!: boolean;

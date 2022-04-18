@@ -6,7 +6,7 @@ export class Token {
     id!: number;
 
     @Column()
-    user_id!: number;
+    userId!: number;
 
     @Column()
     token!: string;

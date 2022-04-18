@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor,
 import { Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthService } from './../services/auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -9,7 +10,10 @@ export class AuthInterceptor implements HttpInterceptor {
   public refresh: boolean = false;
   public static accessToken: string = '';
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private authService: AuthService
+  ) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -20,12 +24,17 @@ export class AuthInterceptor implements HttpInterceptor {
     });
 
     return next.handle(req).pipe(catchError((err: HttpErrorResponse) => {
+      console.log('err.status', err.status);
       if (err.status === 401 && !this.refresh) {
         this.refresh = true;
+        const currentUser = this.authService.userData;
+        // const isLoggedIn = currentUser && currentUser.token;
 
-        return this.http.post(`${this.apiBaseUrl}/refresh`, {}, {withCredentials: true}).pipe(
+
+        return this.httpClient.post(`${this.apiBaseUrl}/auth/refresh`, {}, {withCredentials: true}).pipe(
           switchMap((res: any) => {
             AuthInterceptor.accessToken = res.token;
+            console.log('res.token', res.token);
 
             return next.handle(request.clone({
               setHeaders: {
@@ -35,8 +44,9 @@ export class AuthInterceptor implements HttpInterceptor {
           })
         );
       }
+
       this.refresh = false;
-      return throwError(() => err);
+      return throwError(() => {console.log('err', err); return err});
     }));
   }
 }

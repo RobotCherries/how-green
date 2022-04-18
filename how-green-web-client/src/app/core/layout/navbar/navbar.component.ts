@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from './../../auth/services/auth/auth.service';
 
 @Component({
@@ -6,13 +7,13 @@ import { AuthService } from './../../auth/services/auth/auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
-
+export class NavbarComponent {
   public isMenuCollapsed: boolean = true;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
-  ngOnInit(): void {
+  logout(): void {
+    this.authService.logout();
   }
 
 }

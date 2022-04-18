@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 // import { Auth, GoogleAuthProvider, signInWithPopup, signOut } from '@angular/fire/auth';
 import { AuthService } from './../../services/auth/auth.service';
 
@@ -12,8 +13,9 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
 
   constructor(
+    private router: Router,
     private authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -27,12 +29,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async login(): Promise<void> {
+  login(): void {
     console.log(this.form.getRawValue());
     this.authService.login(this.form.getRawValue());
-  }
-
-  logout(): void {
-    // signOut(this.auth);
   }
 }

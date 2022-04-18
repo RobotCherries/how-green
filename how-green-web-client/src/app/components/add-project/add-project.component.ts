@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
 
 @Component({
@@ -14,7 +15,10 @@ export class AddProjectComponent implements OnInit {
   };
   submitted = false;
 
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private router: Router,
+    private projectService: ProjectService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -36,6 +40,10 @@ export class AddProjectComponent implements OnInit {
         });
   }
 
+  getUserId(): any {
+    // return this
+  }
+
   newProject(): void {
     this.submitted = false;
     this.project = {
@@ -43,6 +51,10 @@ export class AddProjectComponent implements OnInit {
       description: '',
       published: false
     };
+  }
+
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 
 }

@@ -26,5 +26,5 @@ export class Appliance {
     wattage?: number;
 
     @CreateDateColumn()
-    created_at!: Date;
+    createdAt!: Date;
 }

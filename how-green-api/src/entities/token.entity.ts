@@ -12,7 +12,7 @@ export class Token {
     token!: string;
 
     @CreateDateColumn()
-    created_at!: Date;
+    createdAt!: Date;
 
     @Column()
     expired_at!: Date;

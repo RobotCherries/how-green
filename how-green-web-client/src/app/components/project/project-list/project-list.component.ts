@@ -12,7 +12,7 @@ import { IProject } from 'src/app/shared/interfaces/project.interface';
 export class ProjectsListComponent implements OnInit {
 
   projects: IProject[] = [];
-  currentProject: IProject = null;
+  project: IProject = null;
   currentIndex: number = -1;
   title: string = '';
 
@@ -42,15 +42,15 @@ export class ProjectsListComponent implements OnInit {
 
   initCurrentProject(): void {
     if(this.projects?.length) {
-      this.currentProject = this.projects[0];
+      this.project = this.projects[0];
       this.currentIndex = 0;
-      this.setActiveProject(this.currentProject, this.currentIndex);
+      this.setActiveProject(this.project, this.currentIndex);
     }
   }
 
   setActiveProject(project, index): void {
-    this.currentProject = project;
-    console.log(this.currentProject, this.currentIndex);
+    this.project = project;
+    console.log(this.project, this.currentIndex);
     this.currentIndex = index;
   }
 

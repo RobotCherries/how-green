@@ -6,4 +6,5 @@ export interface IProject {
   description: string;
   score?: number;
   status?: string;
+  createdAt?: string;
 }

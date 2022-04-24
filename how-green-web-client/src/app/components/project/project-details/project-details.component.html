@@ -94,7 +94,7 @@
     </div>
 
     <hg-project-appliances
-      *ngIf="projectAppliances.length; else noProjectAppliances"
+      *ngIf="projectAppliances?.length; else noProjectAppliances"
       [projectAppliances]="projectAppliances"
     ></hg-project-appliances>
 

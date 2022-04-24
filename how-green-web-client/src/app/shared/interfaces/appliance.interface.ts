@@ -8,5 +8,5 @@ export interface IAppliance {
   energyEfficiencyClass: number;
   energyConsumptionPerYear?: number;
   wattage?: number;
-  created_at: Date;
+  createdAt: Date;
 }

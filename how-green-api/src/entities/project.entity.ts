@@ -23,5 +23,5 @@ export class Project {
     status!: boolean;
 
     @CreateDateColumn()
-    created_at!: Date;
+    createdAt!: Date;
 }

@@ -10,10 +10,10 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'projects', pathMatch: 'full' },
   { path: 'projects', component: ProjectsListComponent, canActivate: [AuthGuard]  },
+  { path: 'projects/add', component: ProjectAddComponent, canActivate: [AuthGuard]  },
   { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [AuthGuard]  },
   { path: 'projects/:id/appliances', component: ProjectAppliancesComponent, canActivate: [AuthGuard]  },
   { path: 'projects/:id/appliances/add', component: ApplianceAddComponent, canActivate: [AuthGuard]  },
-  { path: 'add', component: ProjectAddComponent, canActivate: [AuthGuard]  }
 ];
 
 @NgModule({

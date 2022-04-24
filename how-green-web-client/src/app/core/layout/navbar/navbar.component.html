@@ -6,32 +6,19 @@
   </a>
 
   <div class="navbar__main d-flex align-items-center justify-content-end">
-    <p *ngIf="authService.isUserLoggedIn.value" class="my-2 mx-2">
-      Hi {{ authService.userData.value?.name }}<span class="d-none d-md-inline ps-2 ms-2">|</span>
-    </p>
-
-    <!-- Step 3: Toggle the value of the property when the toggler button is clicked. -->
     <button class="navbar-toggler mx-2 my-2" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
       &#9776;
     </button>
   </div>
 
-  <!-- Step 2: Add the ngbCollapse directive to the element below. -->
   <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
     <ul class="navbar-nav me-auto mt-lg-0 align-items-end">
       <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
-        <!-- Step 4: Close the menu when a link is clicked. -->
-        <a class="nav-link my-md-2" routerLink="/" (click)="isMenuCollapsed = true">Projects</a>
-      </li>
-
-      <li *ngIf="authService.isUserLoggedIn.value" class="nav-item" routerLinkActive="active">
-        <!-- Step 4: Close the menu when a link is clicked. -->
-        <a class="nav-link my-md-2" routerLink="/add" (click)="isMenuCollapsed = true">Add new project</a>
+        <a class="nav-link my-md-2 me-2" routerLink="/" (click)="isMenuCollapsed = true">My projects</a>
       </li>
 
       <li class="nav-item" routerLinkActive="active">
-        <!-- Step 4: Close the menu when a link is clicked. -->
-        <div class="d-flex my-md-2 ml-auto mr-0">
+        <div class="d-flex my-md-2 ml-auto">
           <button
             *ngIf="!authService.isUserLoggedIn.value"
             class="btn btn-dark my-2 my-sm-0"

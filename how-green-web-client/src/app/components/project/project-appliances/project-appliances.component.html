@@ -1,0 +1,38 @@
+<div class="list-group shadow-sm">
+  <label
+    class="list-group-item d-flex"
+    *ngFor="let appliance of projectAppliances"
+  >
+    <!-- <img
+      src="https://i.imgur.com/SXm9Rt2.png"
+      alt="twbs"
+      width="36"
+      height="36"
+      class="rounded flex-shrink-0 my-auto"
+    /> -->
+    <!-- <input class="form-check-input flex-shrink-0 my-auto" type="checkbox" style="font-size: 1.375em;" /> -->
+
+    <div class="form-checked-content w-100">
+      <strong class="d-block pb-1">{{ appliance.name }}</strong>
+
+      <div class="row w-100 ">
+        <div class="col-4 text-muted small border-end">
+          <b [ngStyle]="{ color: (appliance.energyEfficiencyClass | energyEfficiencyClassColor) }">
+            {{ appliance.energyEfficiencyClass | energyEfficiencyClass }}
+          </b>
+          <small>class</small>
+        </div>
+
+        <div class="col-4 text-muted small border-end">
+          {{ appliance.energyConsumptionPerYear ? appliance.energyConsumptionPerYear : "-" }}
+          <small>kWh/year</small>
+        </div>
+
+        <div class="col-4 text-muted small">
+          {{ appliance.wattage ? appliance.wattage : "-" }}
+          <small>w</small>
+        </div>
+      </div>
+    </div>
+  </label>
+</div>

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as authController from '../controllers/auth.controller';
+import * as projectApplianceController from '../controllers/project-appliance.controller';
 import * as projectController from '../controllers/project.controller';
 
 export const routes = (router: Router) => {
@@ -13,6 +14,10 @@ export const routes = (router: Router) => {
     router.get('/api/projects/', projectController.FindAll);
     router.get('/api/projects/status', projectController.FindAllStatus);
     router.get('/api/projects/:id', projectController.FindOne);
+    router.get('/api/projects/:id/score', projectController.GetScore);
     router.put('/api/projects/:id', projectController.Update);
     router.delete('/api/projects/:id', projectController.Delete);
+
+    router.get('/api/projects/:id/appliances', projectApplianceController.GetAll);
+    router.post('/api/projects/:id/appliances', projectApplianceController.Create);
 }

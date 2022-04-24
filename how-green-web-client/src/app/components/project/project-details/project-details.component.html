@@ -1,0 +1,118 @@
+<div class="my-5 container">
+
+  <ngb-alert
+    *ngIf="projectStatus.message"
+    [type]="projectStatus.type"
+    (closed)="projectStatus.message = ''"
+    >{{ projectStatus.message }}
+  </ngb-alert>
+
+  <div class="d-flex justify-content-between mt-5 mb-4">
+    <h4>Project</h4>
+
+    <div class="btn-group">
+      <button
+        *ngIf="!isFormEditable"
+        class="btn btn-outline-secondary"
+        (click)="isFormEditable = !isFormEditable"
+      >
+        Edit
+      </button>
+
+      <button
+        *ngIf="isFormEditable"
+        type="submit"
+        class="btn btn-outline-primary"
+        (click)="updateProject()"
+      >
+        Update
+      </button>
+
+      <button
+        class="btn btn-outline-dark mr-2 float-end"
+        (click)="deleteProject()"
+      >
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card card-body shadow-sm">
+    <form>
+      <div class="form-group">
+        <label class="fw-bold">Title</label>
+        <input
+          type="text"
+          class="form-control mask-readonly-input"
+          id="title"
+          [(ngModel)]="project.title"
+          [readonly]="!isFormEditable"
+          name="title"
+        />
+      </div>
+      <div class="form-group">
+        <label class="fw-bold">Description</label>
+        <input
+          type="text"
+
+          class="form-control mask-readonly-input"
+          id="description"
+          [(ngModel)]="project.description"
+          [readonly]="!isFormEditable"
+          name="description"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="fw-bold">Overall Score</label>
+        <input
+          type="text"
+          [style.color]="(project.score | energyEfficiencyClassColor) + '!important'"
+          class="form-control mask-readonly-input text-muted fst-italic fw-bold"
+          id="score"
+          [ngModel]="(project.score | energyEfficiencyClass) || 'Add at least one appliance first.'"
+          [readonly]="true"
+          name="score"
+        />
+      </div>
+    </form>
+  </div>
+
+  <div class="section section--appliances">
+    <div class="d-flex justify-content-between mt-5 mb-4">
+      <h4>Appliances</h4>
+
+      <div class="btn-group">
+        <button
+          *ngIf="!isFormEditable"
+          class="btn btn-outline-primary"
+          (click)="isFormEditable = !isFormEditable"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+
+    <hg-project-appliances
+      *ngIf="projectAppliances.length; else noProjectAppliances"
+      [projectAppliances]="projectAppliances"
+    ></hg-project-appliances>
+
+    <ng-template #noProjectAppliances>
+      <ngb-alert
+        *ngIf="projectAppliances"
+        class="shadow-sm"
+        [type]="'light'"
+        [dismissible]="false"
+      >
+        {{ "No appliances to display" }}
+      </ngb-alert>
+    </ng-template>
+  </div>
+
+  <div *ngIf="!project">
+    <br />
+    <p>Cannot access this Project...</p>
+  </div>
+
+</div>

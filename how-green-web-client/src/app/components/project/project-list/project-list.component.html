@@ -13,6 +13,7 @@
         />
       </div>
     </div>
+
     <div class="col-md-6">
       <ul class="list-group">
         <li
@@ -26,9 +27,11 @@
       </ul>
     </div>
 
+    <div class="d-block d-md-none my-5 border-bottom"></div>
+
     <div class="col-md-6">
       <div *ngIf="currentProject">
-        <h4>Project</h4>
+        <h4 class="mb-3">Project</h4>
         <div>
           <label><strong>Title:</strong></label> {{ currentProject.title }}
         </div>
@@ -40,14 +43,22 @@
           <label><strong>Status:</strong></label>
           {{ currentProject.status ? "status" : "Pending" }}
         </div>
-        <div>
+        <div class="mb-3">
           <label><strong>Score:</strong></label>
           {{ currentProject.score }}
         </div>
 
-        <a class="badge badge-warning" routerLink="/projects/{{ currentProject.id }}">
+        <button class="btn btn-sm btn-primary me-2" [routerLink]="'/projects/' + currentProject.id + '/appliances/add'">
+          Add appliance
+        </button>
+
+        <button class="btn btn-sm btn-secondary me-2" [routerLink]="'/projects/' + currentProject.id">
+          View
+        </button>
+
+        <button class="btn btn-sm btn-dark me-2" [routerLink]="'/projects/' + currentProject.id + '/appliances/add'">
           Edit
-        </a>
+        </button>
       </div>
 
       <div *ngIf="!currentProject">

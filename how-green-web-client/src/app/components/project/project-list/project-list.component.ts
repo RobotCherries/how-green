@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
+import { IProjectSearchCriteria } from 'src/app/shared/interfaces/project-search-criteria.interface';
 import { IProject } from 'src/app/shared/interfaces/project.interface';
-import { AuthService } from './../../core/auth/services/auth/auth.service';
-import { IProjectSearchCriteria } from './../../shared/interfaces/project-search-criteria.interface';
 
 @Component({
   selector: 'hg-project-list',
@@ -12,9 +12,9 @@ import { IProjectSearchCriteria } from './../../shared/interfaces/project-search
 export class ProjectsListComponent implements OnInit {
 
   projects: IProject[] = [];
-  currentProject = this.projects[0];
-  currentIndex = 0;
-  title = '';
+  currentProject: IProject = null;
+  currentIndex: number = -1;
+  title: string = '';
 
   constructor(
     private projectService: ProjectService,
@@ -31,6 +31,8 @@ export class ProjectsListComponent implements OnInit {
         console.log('projects', data);
         this.projects = data;
         console.log(data);
+        this.initCurrentProject();
+
       },
       error: (error) => {
         console.log(error);
@@ -38,8 +40,17 @@ export class ProjectsListComponent implements OnInit {
     });
   }
 
+  initCurrentProject(): void {
+    if(this.projects?.length) {
+      this.currentProject = this.projects[0];
+      this.currentIndex = 0;
+      this.setActiveProject(this.currentProject, this.currentIndex);
+    }
+  }
+
   setActiveProject(project, index): void {
     this.currentProject = project;
+    console.log(this.currentProject, this.currentIndex);
     this.currentIndex = index;
   }
 

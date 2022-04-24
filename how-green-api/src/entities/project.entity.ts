@@ -6,7 +6,7 @@ export class Project {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @ManyToOne(type => User)
+    @ManyToOne(() => User, user => user.id, { onDelete: 'SET NULL' })
     @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user!: User;
 

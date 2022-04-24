@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IProjectSearchCriteria } from '../shared/interfaces/project-search-criteria.interface';
 
-const apiBaseUrl: string = `${environment.apiEndpoint}/projects/`;
+const apiBaseUrl: string = `${environment.apiEndpoint}/projects`;
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +17,27 @@ export class ProjectService {
     return this.httpClient.get(`${apiBaseUrl}?userId=${userId}`);
   }
 
-  get(id): Observable<any> {
+  get(id: number): Observable<any> {
     return this.httpClient.get(`${apiBaseUrl}/${id}`);
+  }
+
+  getScore(id: number): Observable<any> {
+    return this.httpClient.get(`${apiBaseUrl}/${id}/score`);
+  }
+
+  getAppliances(id: number): Observable<any> {
+    return this.httpClient.get(`${apiBaseUrl}/${id}/appliances`);
   }
 
   create(data): Observable<any> {
     return this.httpClient.post(`${apiBaseUrl}/create`, data);
   }
 
-  update(id, data): Observable<any> {
+  update(id: number, data): Observable<any> {
     return this.httpClient.put(`${apiBaseUrl}/${id}`, data);
   }
 
-  delete(id): Observable<any> {
+  delete(id: number): Observable<any> {
     return this.httpClient.delete(`${apiBaseUrl}/${id}`);
   }
 

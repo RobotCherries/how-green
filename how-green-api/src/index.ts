@@ -14,8 +14,6 @@ createConnection().then(() => {
         credentials: true
     }));
 
-    // app.use('/api/auth', authRoutes);
-    // app.use('/api/projects', projectRoutes);
     routes(app);
 
     app.listen(8080, () => {

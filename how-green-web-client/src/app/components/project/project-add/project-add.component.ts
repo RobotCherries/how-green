@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
-import { AuthService } from './../../core/auth/services/auth/auth.service';
+import { AuthService } from '../../../core/auth/services/auth/auth.service';
 
 @Component({
-  selector: 'hg-add-project',
-  templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.css'],
+  selector: 'hg-project-add',
+  templateUrl: './project-add.component.html',
+  styleUrls: ['./project-add.component.css'],
 })
-export class AddProjectComponent implements OnInit {
+export class ProjectAddComponent implements OnInit {
   project = {
     title: '',
     description: '',

@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/functions";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
 // Default variable overrides
 $primary: #32c36c;
@@ -49,3 +50,10 @@ $utilities: map-merge(
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
+
+input.mask-readonly-input:read-only {
+  background: white;
+  border: none;
+  padding-left: 0;
+}

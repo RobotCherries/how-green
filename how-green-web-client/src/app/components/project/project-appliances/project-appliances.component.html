@@ -13,9 +13,32 @@
     <!-- <input class="form-check-input flex-shrink-0 my-auto" type="checkbox" style="font-size: 1.375em;" /> -->
 
     <div class="form-checked-content w-100">
-      <strong class="d-block pb-1">{{ appliance.name }}</strong>
+      <!-- <strong class="d-block pb-1">{{ appliance.name }}</strong> -->
+      <div>
+        <h6>
+          {{ appliance.name }}
+        </h6>
 
-      <div class="row w-100 ">
+        <div
+          class="btn-group position-absolute top-0 end-0 mt-md-2 me-2 me-md-3"
+        >
+          <button
+            class="btn btn-sm btn-outline-secondary py-0 py-md-1 mt-2"
+            [routerLink]="
+              '/projects/' + projectId + '/appliances/' + appliance.id
+            "
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary py-0 py-md-1 mt-2"
+            (click)="deleteAppliance(appliance.id)"
+          >
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row w-100">
         <div class="col-4 text-muted small border-end">
           <b
             class="text-shadow"
@@ -26,12 +49,16 @@
           <small>class</small>
         </div>
 
-        <div class="col-4 text-muted small border-end">
-          {{ appliance.energyConsumptionPerYear ? appliance.energyConsumptionPerYear : "-" }}
+        <div class="col-5 col-md-4 text-muted small border-end">
+          {{
+            appliance.energyConsumptionPerYear
+              ? appliance.energyConsumptionPerYear
+              : "-"
+          }}
           <small>kWh/year</small>
         </div>
 
-        <div class="col-4 text-muted small">
+        <div class="col-3 col-md-4 text-muted small">
           {{ appliance.wattage ? appliance.wattage : "-" }}
           <small>w</small>
         </div>

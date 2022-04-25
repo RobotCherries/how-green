@@ -102,7 +102,9 @@
 
     <hg-project-appliances
       *ngIf="projectAppliances?.length; else noProjectAppliances"
+      [projectId]="routeProjectId"
       [projectAppliances]="projectAppliances"
+      (delete)="handleApplianceDelete($event)"
     ></hg-project-appliances>
 
     <ng-template #noProjectAppliances>

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
 import { IAppliance } from 'src/app/shared/interfaces/appliance.interface';
 import { IProject } from 'src/app/shared/interfaces/project.interface';
+import { ApplianceService } from './../../../services/appliance.service';
 
 @Component({
   selector: 'hg-project-details',
@@ -17,11 +18,12 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   originalProject: IProject;
   projectAppliances: IAppliance[];
   routeProjectId: number;
-  projectStatus: { type: string, message: string } = { type: '', message: '' };
+  projectStatus: { type: string; message: string } = { type: '', message: '' };
   isFormEditable: boolean = false;
 
   constructor(
     private projectService: ProjectService,
+    private applianceService: ApplianceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -79,11 +81,14 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
         this.projectStatus.type = 'danger';
         this.projectStatus.message = error.error.message;
       },
-    });;
+    });
   }
 
   updateProject(): void {
-    const editedProject = (({ title, description }) => ({ title, description }))(this.project);
+    const editedProject = (({ title, description }) => ({
+      title,
+      description,
+    }))(this.project);
 
     this.projectService.update(this.project.id, editedProject).subscribe({
       next: (response) => {
@@ -109,19 +114,26 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   }
 
   deleteProject(): void {
-    const confirmDelete = confirm('Are you sure you want to delete this project?');
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this project?'
+    );
 
     if (confirmDelete) {
       this.projectService.delete(this.project.id).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.router.navigate(['/projects']);
-      },
-      error: (error) => {
-        this.projectStatus.type = 'danger';
-        this.projectStatus.message = error.error.message;
-        console.log(error);
-      },
-    });
-}  }
+        next: (response) => {
+          console.log(response);
+          this.router.navigate(['/projects']);
+        },
+        error: (error) => {
+          this.projectStatus.type = 'danger';
+          this.projectStatus.message = error.error.message;
+          console.log(error);
+        },
+      });
+    }
+  }
+
+  handleApplianceDelete(id: number): void {
+    this.applianceService.delete(this.routeProjectId, id);
+  }
 }

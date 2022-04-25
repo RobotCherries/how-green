@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { DeleteResult, getRepository, UpdateResult } from "typeorm";
 import { Appliance } from "../entities/appliance.entity";
 
 // Create and Save a new Appliance
@@ -20,7 +20,11 @@ export const Create = (req: Request, res: Response) => {
     return;
   }
 
-  if (req.body.energyClass === null || req.body.energyClass === '' || req.body.energyClass === undefined) {
+  if (
+    req.body.energyClass === null ||
+    req.body.energyClass === "" ||
+    req.body.energyClass === undefined
+  ) {
     res.status(400).send({
       message: "Efficiency Class cannot be empty!",
     });
@@ -69,6 +73,83 @@ export const GetAll = (req: Request, res: Response) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving appliances.",
+      });
+    });
+};
+
+export const GetOne = (req: Request, res: Response) => {
+  const projectId = JSON.parse(req.params.id);
+  const applianceId = JSON.parse(req.params.applianceId);
+
+  getRepository(Appliance)
+    .findOne(applianceId)
+    .then((data: Appliance | undefined) => {
+
+      if(data?.projectId !== projectId) {
+        res.status(401).send("You are only allowed to view appliances from your projects.")
+        return;
+      }
+
+      res.send(data);
+    })
+    .catch((err: any) => {
+      res.status(500).send({
+        message: "Error retrieving Appliance with id=" + applianceId,
+      });
+    });
+};
+
+export const Update = (req: Request, res: Response) => {
+  const projectId = JSON.parse(req.params.id);
+  const applianceId = JSON.parse(req.params.applianceId);
+
+  console.log(projectId, req.body);
+
+  if(req.body.projectId !== projectId) {
+    res.status(401).send("You are only allowed to update appliances from your projects.")
+    return;
+  }
+
+  getRepository(Appliance)
+    .update(applianceId, req.body)
+    .then((result: UpdateResult) => {
+      if (result.affected === 1) {
+        res.send({
+          message: "Appliance was updated successfully.",
+        });
+      } else {
+        res.send({
+          message: `Cannot update Appliance with id=${applianceId}. Maybe Appliance was not found or req.body is empty!`,
+        });
+      }
+    })
+    .catch((err: any) => {
+      res.status(500).send({
+        message: "Error updating Appliance with id=" + applianceId,
+      });
+    });
+};
+
+export const Delete = (req: Request, res: Response) => {
+  const projectId = JSON.parse(req.params.id);
+  const applianceId = JSON.parse(req.params.applianceId);
+
+  getRepository(Appliance)
+    .delete(applianceId)
+    .then((result: DeleteResult) => {
+      if (result.affected === 1) {
+        res.send({
+          message: "Appliance was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Appliance with id=${applianceId}. Maybe Appliance was not found!`,
+        });
+      }
+    })
+    .catch((err: any) => {
+      res.status(500).send({
+        message: "Could not delete Appliance with id=" + applianceId,
       });
     });
 };

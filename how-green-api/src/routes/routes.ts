@@ -19,5 +19,8 @@ export const routes = (router: Router) => {
     router.delete('/api/projects/:id', projectController.Delete);
 
     router.get('/api/projects/:id/appliances', applianceController.GetAll);
+    router.get('/api/projects/:id/appliances/:applianceId', applianceController.GetOne);
     router.post('/api/projects/:id/appliances', applianceController.Create);
+    router.put('/api/projects/:id/appliances/:applianceId', applianceController.Update);
+    router.delete('/api/projects/:id/appliances/:applianceId', applianceController.Delete);
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ApplianceAddComponent } from './components/appliance/appliance-add/appliance-add.component';
+import { ApplianceEditComponent } from './components/appliance/appliance-edit/appliance-edit.component';
 import { ProjectAddComponent } from './components/project/project-add/project-add.component';
 import { ProjectAppliancesComponent } from './components/project/project-appliances/project-appliances.component';
 import { ProjectDetailsComponent } from './components/project/project-details/project-details.component';
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [AuthGuard]  },
   { path: 'projects/:id/appliances', component: ProjectAppliancesComponent, canActivate: [AuthGuard]  },
   { path: 'projects/:id/appliances/add', component: ApplianceAddComponent, canActivate: [AuthGuard]  },
+  { path: 'projects/:id/appliances/:applianceId', component: ApplianceEditComponent, canActivate: [AuthGuard]  },
 ];
 
 @NgModule({

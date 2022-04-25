@@ -10,6 +10,10 @@ export class Project {
     @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user!: User;
 
+    @Column({ nullable: true })
+    userId!: number;
+
+
     @Column()
     title!: string;
 

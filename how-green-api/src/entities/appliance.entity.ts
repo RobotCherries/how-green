@@ -10,6 +10,9 @@ export class Appliance {
     @JoinColumn({ name: 'projectId', referencedColumnName: 'id' })
     project!: Project;
 
+    @Column({ nullable: true })
+    projectId!: number;
+
     @Column()
     name!: string;
 

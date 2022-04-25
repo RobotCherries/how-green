@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
 import { IAppliance } from 'src/app/shared/interfaces/appliance.interface';
@@ -9,7 +9,7 @@ import { IProject } from 'src/app/shared/interfaces/project.interface';
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.css'],
 })
-export class ProjectDetailsComponent implements OnInit {
+export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   project: IProject = {
     title: '',
     description: '',
@@ -31,6 +31,9 @@ export class ProjectDetailsComponent implements OnInit {
     this.getRouteProjectId();
     this.getProject(this.routeProjectId);
     this.getProjectAppliances(this.routeProjectId);
+  }
+
+  ngAfterViewInit(): void {
     this.getProjectScore(this.routeProjectId);
   }
 
@@ -69,12 +72,12 @@ export class ProjectDetailsComponent implements OnInit {
   getProjectScore(id: number): void {
     this.projectService.getScore(id).subscribe({
       next: (response: any) => {
+        console.log(response);
         this.project.score = response.projectScore;
       },
       error: (error) => {
         this.projectStatus.type = 'danger';
         this.projectStatus.message = error.error.message;
-        console.log(error);
       },
     });;
   }

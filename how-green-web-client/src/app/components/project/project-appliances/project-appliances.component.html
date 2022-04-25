@@ -17,7 +17,10 @@
 
       <div class="row w-100 ">
         <div class="col-4 text-muted small border-end">
-          <b [ngStyle]="{ color: (appliance.energyClass | energyClassColor) }">
+          <b
+            class="text-shadow"
+            [ngStyle]="{ color: (appliance.energyClass | energyClassColor) }"
+          >
             {{ appliance.energyClass | energyClass }}
           </b>
           <small>class</small>

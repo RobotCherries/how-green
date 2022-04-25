@@ -65,14 +65,11 @@
           <label class="fw-bold">Overall Score</label>
           <input
             type="text"
+            class="form-control mask-readonly-input text-muted fst-italic text-shadow"
             [style.color]="(project.score | energyClassColor) + '!important'"
             [class.fw-bold]="project.score"
-            class="form-control mask-readonly-input text-muted fst-italic"
             id="score"
-            [ngModel]="
-              (project.score | energyClass) ||
-              'Add at least one appliance first.'
-            "
+            [ngModel]="(project.score | energyClass)"
             [readonly]="true"
             name="score"
           />
@@ -94,7 +91,7 @@
 
       <div class="btn-group">
         <button
-          *ngIf="!isFormEditable"
+          [disabled]="isFormEditable"
           class="btn btn-primary"
           [routerLink]="'/projects/' + project.id + '/appliances/add'"
         >

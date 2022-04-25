@@ -1,6 +1,6 @@
 <div class="my-5 container">
   <div class="list row">
-    <div class="col-md-6">
+    <div class="col-md-6 mb-5">
       <div class="d-flex justify-content-between mb-4">
         <h4>Projects List</h4>
 
@@ -34,10 +34,8 @@
           >
             <div class="ms-2 me-auto">{{ project.title }}</div>
             <span
-              class="badge rounded-pill"
-              [style.background-color]="
-                project.score | energyClassColor
-              "
+              class="badge rounded-pill text-shadow"
+              [style.background-color]="project.score | energyClassColor"
             >
               {{ project.score | energyClass }}
             </span>
@@ -79,7 +77,14 @@
           </li>
           <li class="row">
             <label class="col-3 fw-bold">Score</label>
-            <span class="col">{{ project.score }}</span>
+            <div class="col">
+              <span
+                class="fw-bold text-shadow"
+                [style.color]="project.score | energyClassColor"
+              >
+                {{ project.score | energyClass }}
+              </span>
+            </div>
           </li>
         </ul>
       </div>

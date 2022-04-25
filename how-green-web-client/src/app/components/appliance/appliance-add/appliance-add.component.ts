@@ -44,7 +44,6 @@ export class ApplianceAddComponent implements OnInit {
 
   save(applianceForm): void {
     if(applianceForm.valid) {
-
       const data: IAppliance = {
         name: this.appliance.name,
         description: this.appliance.description,
@@ -53,20 +52,16 @@ export class ApplianceAddComponent implements OnInit {
         wattage: this.appliance.wattage,
         projectId: this.appliance.projectId
       };
-      console.log(data);
 
       this.applianceService.create(this.routeProjectId, data).subscribe({
         next: (response) => {
-          console.log(response);
           this.applianceStatus.type = 'success';
           this.applianceStatus.message = 'The project was created successfully!';
           this.isFormSubmitted = true;
-          console.log('success');
         },
         error: (error) => {
           this.applianceStatus.type = 'danger';
           this.applianceStatus.message = error.error.message;
-          console.log(error);
         },
       });
     } else {

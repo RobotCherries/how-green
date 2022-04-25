@@ -11,9 +11,8 @@ export const routes = (router: Router) => {
     router.post('/api/auth/logout', authController.Logout);
 
     router.post('/api/projects/', projectController.Create);
-    router.get('/api/projects/', projectController.FindAll);
-    router.get('/api/projects/status', projectController.FindAllStatus);
-    router.get('/api/projects/:id', projectController.FindOne);
+    router.get('/api/projects/', projectController.GetAll);
+    router.get('/api/projects/:id', projectController.GetOne);
     router.get('/api/projects/:id/score', projectController.GetScore);
     router.put('/api/projects/:id', projectController.Update);
     router.delete('/api/projects/:id', projectController.Delete);

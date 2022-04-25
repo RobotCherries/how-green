@@ -13,7 +13,6 @@ export class Project {
     @Column({ nullable: true })
     userId!: number;
 
-
     @Column()
     title!: string;
 
@@ -22,9 +21,6 @@ export class Project {
 
     @Column()
     score?: string;
-
-    @Column()
-    status!: boolean;
 
     @CreateDateColumn()
     createdAt!: Date;

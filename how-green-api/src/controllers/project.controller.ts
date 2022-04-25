@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { DeleteResult, getRepository, UpdateResult } from "typeorm";
 import { Appliance } from "../entities/appliance.entity";
 import { Project } from "../entities/project.entity";
 
-// Create and Save a new Project
 export const Create = (req: Request, res: Response) => {
-  // Validate request
   if (!req.body.title || !req.body.userId) {
     res.status(400).send({
       message: "Content can not be empty!",
@@ -21,7 +19,6 @@ export const Create = (req: Request, res: Response) => {
       title: req.body.title,
       description: req.body.description,
       score: req.body.score ? req.body.score : "",
-      status: req.body.status ? req.body.status : false,
       user: {
         id: req.body.userId,
       },
@@ -39,18 +36,17 @@ export const Create = (req: Request, res: Response) => {
     });
 };
 
-// Retrieve all Projects from the database.
-export const FindAll = (req: Request, res: Response) => {
+export const GetAll = (req: Request, res: Response) => {
   const title = req.query.title;
-  console.log("res", req.query);
+  const userId = req.query.userId;
+
   const condition = title
-    ? { title: title, user: req.query.userId }
-    : { user: req.query.userId };
+    ? { title: title, userId: userId }
+    : { userId: userId };
 
   getRepository(Project)
     .find({ where: condition })
     .then((data: Project[]) => {
-      console.log("res data", data);
       res.send(data);
     })
     .catch((err: any) => {
@@ -61,8 +57,7 @@ export const FindAll = (req: Request, res: Response) => {
     });
 };
 
-// Find a single Project with an id
-export const FindOne = (req: Request, res: Response) => {
+export const GetOne = (req: Request, res: Response) => {
   const id = req.params.id;
 
   getRepository(Project)
@@ -98,8 +93,6 @@ export const GetScore = (req: Request, res: Response) => {
 
       const projectScore = getMedian(appliancesEnergyClasses);
 
-      console.log('projectScore', projectScore);
-
       res.status(200).send({ projectScore });
     })
     .catch((err: any) => {
@@ -110,14 +103,13 @@ export const GetScore = (req: Request, res: Response) => {
     });
 };
 
-// Update a Project by the id in the request
 export const Update = (req: Request, res: Response) => {
   const id = req.params.id;
 
   getRepository(Project)
     .update(id, req.body)
-    .then((num: any) => {
-      if (num == 1) {
+    .then((result: UpdateResult) => {
+      if (result.affected === 1) {
         res.send({
           message: "Project was updated successfully.",
         });
@@ -134,14 +126,13 @@ export const Update = (req: Request, res: Response) => {
     });
 };
 
-// Delete a Project with the specified id in the request
 export const Delete = (req: Request, res: Response) => {
   const id = req.params.id;
 
   getRepository(Project)
     .delete(id)
-    .then((num: any) => {
-      if (num == 1) {
+    .then((result: DeleteResult) => {
+      if (result.affected === 1) {
         res.send({
           message: "Project was deleted successfully!",
         });
@@ -154,21 +145,6 @@ export const Delete = (req: Request, res: Response) => {
     .catch((err: any) => {
       res.status(500).send({
         message: "Could not delete Project with id=" + id,
-      });
-    });
-};
-
-// find all status Project
-export const FindAllStatus = (req: Request, res: Response) => {
-  getRepository(Project)
-    .find({ where: { status: true } })
-    .then((data: any) => {
-      res.send(data);
-    })
-    .catch((err: any) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving projects.",
       });
     });
 };

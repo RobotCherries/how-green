@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { IAppliance } from 'src/app/shared/interfaces/appliance.interface';
 import { IProject } from 'src/app/shared/interfaces/project.interface';
@@ -15,6 +14,7 @@ export class ProjectDetailsComponent implements OnInit {
     title: '',
     description: '',
   };
+  originalProject: IProject;
   projectAppliances: IAppliance[];
   routeProjectId: number;
   projectStatus: { type: string, message: string } = { type: '', message: '' };
@@ -23,8 +23,7 @@ export class ProjectDetailsComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -39,14 +38,11 @@ export class ProjectDetailsComponent implements OnInit {
     this.routeProjectId = parseInt(this.route.snapshot.paramMap.get('id'));
   }
 
-  private getUserId(): number {
-    return this.authService.userData.value.id;
-  }
-
   getProject(id): void {
-    this.projectService.get(id).subscribe({
+    this.projectService.getOne(id).subscribe({
       next: (data) => {
         this.project = data;
+        this.originalProject = data;
         console.log(data);
       },
       error: (error) => {
@@ -84,7 +80,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   updateProject(): void {
-    const { title, description } = this.project;
     const editedProject = (({ title, description }) => ({ title, description }))(this.project);
 
     this.projectService.update(this.project.id, editedProject).subscribe({
@@ -92,12 +87,22 @@ export class ProjectDetailsComponent implements OnInit {
         console.log(response);
         this.projectStatus.type = 'success';
         this.projectStatus.message = 'The project was updated successfully!';
+        this.isFormEditable = false;
       },
       error: (error) => {
         this.projectStatus.type = 'danger';
         this.projectStatus.message = error.error.message;
       },
     });
+  }
+
+  initUpdate(): void {
+    this.isFormEditable = true;
+  }
+
+  cancelUpdate(): void {
+    this.project = this.originalProject;
+    this.isFormEditable = false;
   }
 
   deleteProject(): void {

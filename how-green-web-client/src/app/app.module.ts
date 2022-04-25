@@ -12,8 +12,8 @@ import { ProjectAppliancesComponent } from './components/project/project-applian
 import { ProjectDetailsComponent } from './components/project/project-details/project-details.component';
 import { ProjectsListComponent } from './components/project/project-list/project-list.component';
 import { CoreModule } from './core/core.module';
-import { EnergyEfficiencyClassColorPipe } from './shared/pipes/energy-efficiency-class-color.pipe';
-import { EnergyEfficiencyClassPipe } from './shared/pipes/energy-efficiency-class.pipe';
+import { EnergyClassColorPipe } from './shared/pipes/energy-class-color.pipe';
+import { EnergyClassPipe } from './shared/pipes/energy-class.pipe';
 
 @NgModule({
   imports: [
@@ -33,12 +33,12 @@ import { EnergyEfficiencyClassPipe } from './shared/pipes/energy-efficiency-clas
     ProjectsListComponent,
     ProjectAppliancesComponent,
     ApplianceAddComponent,
-    EnergyEfficiencyClassPipe,
-    EnergyEfficiencyClassColorPipe,
+    EnergyClassPipe,
+    EnergyClassColorPipe,
   ],
   providers: [
-    EnergyEfficiencyClassPipe,
-    EnergyEfficiencyClassColorPipe
+    EnergyClassPipe,
+    EnergyClassColorPipe
   ],
   bootstrap: [AppComponent]
 })

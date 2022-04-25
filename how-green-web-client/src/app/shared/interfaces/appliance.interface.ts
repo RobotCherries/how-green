@@ -1,12 +1,11 @@
-import { IProject } from './project.interface';
 
 export interface IAppliance {
-  id: number;
-  project: IProject;
+  id?: number;
+  projectId: number;
   name: string;
-  description: string;
-  energyEfficiencyClass: number;
+  description?: string;
+  energyClass: number;
   energyConsumptionPerYear?: number;
   wattage?: number;
-  createdAt: Date;
+  createdAt?: Date;
 }

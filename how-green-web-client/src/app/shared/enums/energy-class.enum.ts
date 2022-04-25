@@ -1,4 +1,4 @@
-export enum EnergyEfficiencyClassEnum {
+export enum EnergyClassEnum {
   'A++',
   'A+',
   'A',

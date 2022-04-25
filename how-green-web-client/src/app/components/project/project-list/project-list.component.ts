@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
@@ -10,7 +11,6 @@ import { IProject } from 'src/app/shared/interfaces/project.interface';
   styleUrls: ['./project-list.component.css']
 })
 export class ProjectsListComponent implements OnInit {
-
   projects: IProject[] = [];
   project: IProject = null;
   currentIndex: number = -1;
@@ -22,14 +22,19 @@ export class ProjectsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.retrieveProjects();
+    this.getAllProjects(this.getUserId());
   }
 
-  retrieveProjects(): void {
-    this.projectService.getAll(1).subscribe({
-      next: (data) => {
+  private getUserId(): number {
+    return this.authService.userData.value.id;
+  }
+
+  getAllProjects(id: number): void {
+    this.projectService.getAll(id).subscribe({
+      next: (data: IProject[]) => {
         console.log('projects', data);
         this.projects = data;
+        this.getProjectScores();
         console.log(data);
         this.initCurrentProject();
 
@@ -38,6 +43,19 @@ export class ProjectsListComponent implements OnInit {
         console.log(error);
       }
     });
+  }
+
+  getProjectScores(): void {
+    this.projects.forEach((project: IProject) => {
+      this.projectService.getScore(project.id).subscribe({
+        next: (response: { projectScore: number }) => {
+          project.score = response.projectScore;
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error.error.message);
+        }
+      });
+    })
   }
 
   initCurrentProject(): void {
@@ -56,7 +74,7 @@ export class ProjectsListComponent implements OnInit {
 
   searchTitle(): void {
     const searchCriteria: IProjectSearchCriteria = {
-      userId: this.authService.userData.value.id,
+      userId: this.getUserId(),
       title: this.title
     }
 

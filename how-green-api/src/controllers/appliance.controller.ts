@@ -6,6 +6,13 @@ import { Appliance } from "../entities/appliance.entity";
 export const Create = (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
 
+  if (!req.params.id) {
+    res.status(400).send({
+      message: "Project Id must be valid!",
+    });
+    return;
+  }
+
   if (!req.body.name) {
     res.status(400).send({
       message: "Name cannot be empty!",
@@ -13,9 +20,9 @@ export const Create = (req: Request, res: Response) => {
     return;
   }
 
-  if (req.body.energyEfficiencyClass === null || req.body.energyEfficiencyClass === '' || req.body.energyEfficiencyClass === undefined) {
+  if (req.body.energyClass === null || req.body.energyClass === '' || req.body.energyClass === undefined) {
     res.status(400).send({
-      message: "Efficiency Score cannot be empty!",
+      message: "Efficiency Class cannot be empty!",
     });
     return;
   }
@@ -27,7 +34,7 @@ export const Create = (req: Request, res: Response) => {
     .values({
       name: req.body.name,
       description: req.body.description,
-      energyEfficiencyClass: req.body.energyEfficiencyClass,
+      energyClass: req.body.energyClass,
       energyConsumptionPerYear: req.body.energyConsumptionPerYear
         ? req.body.energyConsumptionPerYear
         : 0,
@@ -37,7 +44,10 @@ export const Create = (req: Request, res: Response) => {
       },
     })
     .execute()
-    .then(() => console.log("Appliance added successfully!"))
+    .then((data) => {
+      res.status(201).send(data);
+      console.log("Appliance added successfully!");
+    })
     .catch((err: any) => {
       res.status(500).send({
         message:

@@ -15,8 +15,9 @@ export class ProjectAddComponent implements OnInit {
     status: false,
     userId: this.getUserId(),
   };
+  projectStatus: { type: string, message: string } = { type: '', message: '' };
 
-  submitted = false;
+  isFormSubmitted = false;
 
   constructor(
     private router: Router,
@@ -25,6 +26,7 @@ export class ProjectAddComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.projectStatus.message = '';
     this.project.userId = this.getUserId();
   }
 
@@ -42,18 +44,22 @@ export class ProjectAddComponent implements OnInit {
     this.projectService.create(data).subscribe({
       next: (response) => {
         console.log(response);
-        this.submitted = true;
+        this.projectStatus.type = 'success';
+        this.projectStatus.message = 'The project was created successfully!';
+        this.isFormSubmitted = true;
+        console.log('success');
       },
       error: (error) => {
+        this.projectStatus.type = 'danger';
+        this.projectStatus.message = error.error.message;
         console.log(error);
       },
     });
   }
 
 
-
   newProject(): void {
-    this.submitted = false;
+    this.isFormSubmitted = false;
     this.project = {
       title: '',
       description: '',

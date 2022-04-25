@@ -26,7 +26,17 @@ export const Create = (req: Request, res: Response) => {
         id: req.body.userId,
       },
     })
-    .execute();
+    .execute()
+    .then((data) => {
+      res.status(201).send(data);
+      console.log("Project added successfully!");
+    })
+    .catch((err: any) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while adding the new project.",
+      });
+    });
 };
 
 // Retrieve all Projects from the database.
@@ -74,8 +84,8 @@ export const GetScore = (req: Request, res: Response) => {
     .find({ where: { project: { id: projectId } } })
     .then((data: Appliance[]) => {
 
-      const appliancesEnergyEfficiencyClasses: number[] = data.map(
-        (appliance: Appliance) => appliance.energyEfficiencyClass
+      const appliancesEnergyClasses: number[] = data.map(
+        (appliance: Appliance) => appliance.energyClass
       );
 
       const getMedian = (arr: number[]) => {
@@ -86,7 +96,7 @@ export const GetScore = (req: Request, res: Response) => {
           : (arr[middle - 1] + arr[middle]) / 2;
       };
 
-      const projectScore = getMedian(appliancesEnergyEfficiencyClasses);
+      const projectScore = getMedian(appliancesEnergyClasses);
 
       console.log('projectScore', projectScore);
 

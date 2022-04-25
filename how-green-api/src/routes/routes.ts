@@ -1,6 +1,6 @@
 import { Router } from 'express';
+import * as applianceController from '../controllers/appliance.controller';
 import * as authController from '../controllers/auth.controller';
-import * as projectApplianceController from '../controllers/project-appliance.controller';
 import * as projectController from '../controllers/project.controller';
 
 export const routes = (router: Router) => {
@@ -10,7 +10,7 @@ export const routes = (router: Router) => {
     router.post('/api/auth/refresh', authController.Refresh);
     router.post('/api/auth/logout', authController.Logout);
 
-    router.post('/api/projects/create', projectController.Create);
+    router.post('/api/projects/', projectController.Create);
     router.get('/api/projects/', projectController.FindAll);
     router.get('/api/projects/status', projectController.FindAllStatus);
     router.get('/api/projects/:id', projectController.FindOne);
@@ -18,6 +18,6 @@ export const routes = (router: Router) => {
     router.put('/api/projects/:id', projectController.Update);
     router.delete('/api/projects/:id', projectController.Delete);
 
-    router.get('/api/projects/:id/appliances', projectApplianceController.GetAll);
-    router.post('/api/projects/:id/appliances', projectApplianceController.Create);
+    router.get('/api/projects/:id/appliances', applianceController.GetAll);
+    router.post('/api/projects/:id/appliances', applianceController.Create);
 }

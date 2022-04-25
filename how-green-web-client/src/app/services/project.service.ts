@@ -13,11 +13,15 @@ export class ProjectService {
 
   constructor(private httpClient: HttpClient) { }
 
+  create(data): Observable<any> {
+    return this.httpClient.post(`${apiBaseUrl}/`, data);
+  }
+
   getAll(userId: number): Observable<any> {
     return this.httpClient.get(`${apiBaseUrl}?userId=${userId}`);
   }
 
-  get(id: number): Observable<any> {
+  getOne(id: number): Observable<any> {
     return this.httpClient.get(`${apiBaseUrl}/${id}`);
   }
 
@@ -27,10 +31,6 @@ export class ProjectService {
 
   getAppliances(id: number): Observable<any> {
     return this.httpClient.get(`${apiBaseUrl}/${id}/appliances`);
-  }
-
-  create(data): Observable<any> {
-    return this.httpClient.post(`${apiBaseUrl}/create`, data);
   }
 
   update(id: number, data): Observable<any> {

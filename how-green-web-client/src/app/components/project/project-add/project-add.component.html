@@ -1,8 +1,24 @@
-<div style="width: 400px; margin: auto;">
-  <div class="submit-form">
-    <div *ngIf="!submitted">
+<div class="my-5 container">
+  <ngb-alert
+    *ngIf="projectStatus.message"
+    [type]="projectStatus.type"
+    (closed)="projectStatus.message = ''"
+    >{{ projectStatus.message }}
+  </ngb-alert>
+
+  <div class="d-flex justify-content-between mt-5 mb-4">
+    <h4>Add Project</h4>
+
+    <div *ngIf="isFormSubmitted" class="btn-group">
+      <button class="btn btn-outline-primary" (click)="newProject()">Add more</button>
+      <button class="btn btn-outline-secondary" (click)="goBack()">Go back</button>
+    </div>
+  </div>
+
+  <div *ngIf="!isFormSubmitted" class="card card-body shadow-sm">
+    <form>
       <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title" class="fw-bold">Title</label>
         <input
           type="text"
           class="form-control"
@@ -14,7 +30,7 @@
       </div>
 
       <div class="form-group mb-3">
-        <label for="description">Description</label>
+        <label for="description" class="fw-bold">Description</label>
         <input
           class="form-control"
           id="description"
@@ -24,13 +40,7 @@
         />
       </div>
 
-      <button (click)="saveProject()" class="btn btn-success">Submit</button>
-    </div>
-
-    <div *ngIf="submitted">
-      <h4>You submitted successfully!</h4>
-      <button class="btn btn-success" (click)="newProject()">Add</button>
-      <button class="btn btn-light" (click)="goBack()">Go back</button>
-    </div>
+      <button (click)="saveProject()" class="btn btn-outline-primary">Submit</button>
+    </form>
   </div>
 </div>

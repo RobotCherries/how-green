@@ -1,4 +1,4 @@
-export enum EnergyEfficiencyClassColorEnum {
+export enum EnergyClassColorEnum {
   '#039add',
   '#0172a3',
   '#036b30',

@@ -1,12 +1,14 @@
 <div class="my-5 container">
-
   <div class="list row">
     <div class="col-md-6">
       <div class="d-flex justify-content-between mb-4">
         <h4>Projects List</h4>
 
         <div class="btn-group">
-          <button class="btn btn-sm btn-outline-secondary" routerLink="/projects/add">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            routerLink="/projects/add"
+          >
             Add
           </button>
         </div>
@@ -25,12 +27,20 @@
       <div>
         <ul class="list-group">
           <li
-            class="list-group-item"
+            class="list-group-item d-flex justify-content-between align-items-start"
             *ngFor="let project of projects; let i = index"
             [class.active]="i == currentIndex"
             (click)="setActiveProject(project, i)"
           >
-            {{ project.title }}
+            <div class="ms-2 me-auto">{{ project.title }}</div>
+            <span
+              class="badge rounded-pill"
+              [style.background-color]="
+                project.score | energyClassColor
+              "
+            >
+              {{ project.score | energyClass }}
+            </span>
           </li>
         </ul>
       </div>
@@ -43,8 +53,12 @@
         <h4>Project Preview</h4>
 
         <div class="btn-group">
-          <button *ngIf="project?.id" class="btn btn-sm btn-outline-secondary" [routerLink]="'/projects/' + project.id">
-            View more
+          <button
+            *ngIf="project?.id"
+            class="btn btn-sm btn-outline-secondary"
+            [routerLink]="'/projects/' + project.id"
+          >
+            View details
           </button>
         </div>
       </div>

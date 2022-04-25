@@ -17,7 +17,7 @@ export class Appliance {
     description?: string;
 
     @Column()
-    energyEfficiencyClass!: number;
+    energyClass!: number;
 
     @Column()
     energyConsumptionPerYear?: number;

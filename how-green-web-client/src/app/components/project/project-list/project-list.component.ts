@@ -75,7 +75,7 @@ export class ProjectsListComponent implements OnInit {
   searchTitle(): void {
     const searchCriteria: IProjectSearchCriteria = {
       userId: this.getUserId(),
-      title: this.title
+      title: this.title.toLocaleLowerCase()
     }
 
     this.projectService.findBy(searchCriteria).subscribe({

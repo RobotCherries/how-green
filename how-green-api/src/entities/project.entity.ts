@@ -51,8 +51,8 @@ export class Project {
     @Column()
     description!: string;
 
-    @Column()
-    score?: string;
+    @Column({ nullable: true })
+    score?: number;
 
     @CreateDateColumn()
     createdAt!: Date;

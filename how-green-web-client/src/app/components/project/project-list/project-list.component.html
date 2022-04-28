@@ -32,12 +32,12 @@
             [class.list-group-item-primary]="i == currentIndex"
             (click)="setActiveProject(project, i)"
           >
-            <div class="ms-2 me-auto">{{ project.title }}</div>
+            <div class="ms-2 me-auto">{{ project?.id }}. {{ project?.title }}</div>
             <span
               class="badge rounded-pill text-shadow"
-              [style.background-color]="project.score | energyClassColor"
+              [style.background-color]="project?.score | energyClassColor"
             >
-              {{ project.score | energyClass }}
+              {{ project?.score | energyClass }}
             </span>
           </li>
         </ul>
@@ -65,24 +65,24 @@
         <ul class="list-unstyled mb-0">
           <li class="row border-bottom pb-2 mb-2">
             <label class="col-3 fw-bold">Title</label>
-            <span class="col">{{ project.title }}</span>
+            <span class="col">{{ project?.title }}</span>
           </li>
           <li class="row border-bottom pb-2 mb-2">
             <label class="col-3 fw-bold">Description</label>
-            <span class="col">{{ project.description }}</span>
+            <span class="col">{{ project?.description }}</span>
           </li>
           <li class="row border-bottom pb-2 mb-2">
             <label class="col-3 fw-bold">Created at</label>
-            <span class="col">{{ project.createdAt | date }}</span>
+            <span class="col">{{ project?.createdAt | date }}</span>
           </li>
           <li class="row">
             <label class="col-3 fw-bold">Score</label>
             <div class="col">
               <span
                 class="fw-bold text-shadow"
-                [style.color]="project.score | energyClassColor"
+                [style.color]="project?.score | energyClassColor"
               >
-                {{ project.score | energyClass }}
+                {{ project?.score | energyClass }}
               </span>
             </div>
           </li>

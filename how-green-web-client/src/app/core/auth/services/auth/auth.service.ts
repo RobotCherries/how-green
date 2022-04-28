@@ -14,7 +14,7 @@ const apiBaseUrl: string = environment.apiEndpoint;
 export class AuthService {
 public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 public userData: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
-
+public accessToken: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
 constructor(
   private router: Router,
@@ -38,7 +38,7 @@ constructor(
         AuthInterceptor.accessToken = res.token;
 
         localStorage.setItem('isUserLoggedIn', 'true');
-        localStorage.setItem('jwtToken', res.token);
+        localStorage.setItem('accessToken', JSON.stringify(res.token));
 
         this.isUserLoggedIn.next(true);
         this.getUserData();
@@ -51,7 +51,6 @@ constructor(
     this.httpClient
       .get(`${apiBaseUrl}/auth/user`, { withCredentials: true })
       .subscribe((data: IUser) => {
-        console.log('data', data);
         localStorage.setItem('userData', JSON.stringify(data));
         this.userData.next(data);
       });
@@ -60,11 +59,11 @@ constructor(
   refreshUserState(): void {
     const storedUserLogin = JSON.parse(localStorage.getItem('isUserLoggedIn'));
     const storedUserData = JSON.parse(localStorage.getItem('userData'));
+    const storedAccessToken = localStorage.getItem('accessToken');
 
     this.isUserLoggedIn.next(storedUserLogin);
     this.userData.next(storedUserData);
-    console.log(this.isUserLoggedIn.value);
-    console.log(this.userData.value);
+    this.accessToken.next(storedAccessToken);
   }
 
   logout(): void {
@@ -75,7 +74,7 @@ constructor(
         AuthInterceptor.accessToken = '';
         localStorage.removeItem('isUserLoggedIn');
         localStorage.removeItem('userData');
-        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('accessToken');
 
         this.router.navigate(['/login']);
       });

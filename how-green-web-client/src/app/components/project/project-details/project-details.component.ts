@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { IAppliance } from 'src/app/shared/interfaces/appliance.interface';
 import { IProject } from 'src/app/shared/interfaces/project.interface';
@@ -25,10 +26,13 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
     private projectService: ProjectService,
     private applianceService: ApplianceService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authService.getUserData();
+
     this.projectStatus.message = '';
     this.getRouteProjectId();
     this.getProject(this.routeProjectId);

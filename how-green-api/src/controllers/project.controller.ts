@@ -1,12 +1,76 @@
-import { Request, Response } from "express";
-import { DeleteResult, getRepository, UpdateResult } from "typeorm";
-import { Appliance } from "../entities/appliance.entity";
-import { Project } from "../entities/project.entity";
+import { NextFunction, Request, Response } from 'express';
+import { DeleteResult, getRepository, UpdateResult } from 'typeorm';
+import { Appliance } from '../entities/appliance.entity';
+import { Project } from '../entities/project.entity';
 
+/**
+ * @swagger
+ * /projects:
+ *   post:
+ *     description: Use to create a new project for a user
+ *     produces: ['application/json']
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: number
+ *                 description: Id of the user who created the project
+ *                 example: 1
+ *               title:
+ *                 type: string
+ *                 description: Project title
+ *                 example: Office
+ *               description:
+ *                 type: string
+ *                 description: Project description
+ *                 example: The main office of X company
+ *               score:
+ *                 type: number
+ *                 description: Project energy class score (from 0 meaning A++, the best energy class to 7 meaning F, the worst energy class)
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Success response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Invalid Title or UserId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Invalid Title or UserId
+ *       500:
+ *         description: Server error response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A server error occurred while adding the new project
+ */
 export const Create = (req: Request, res: Response) => {
-  if (!req.body.title || !req.body.userId) {
+  if (!req.body.title) {
     res.status(400).send({
-      message: "Content can not be empty!",
+      message: 'Invalid Title',
+    });
+    return;
+  }
+
+  if (!req.body.userId) {
+    res.status(400).send({
+      message: 'Invalid Id',
     });
     return;
   }
@@ -18,7 +82,7 @@ export const Create = (req: Request, res: Response) => {
     .values({
       title: req.body.title,
       description: req.body.description,
-      score: req.body.score ? req.body.score : "",
+      score: req.body.score ? req.body.score : '',
       user: {
         id: req.body.userId,
       },
@@ -26,21 +90,70 @@ export const Create = (req: Request, res: Response) => {
     .execute()
     .then((data) => {
       res.status(201).send(data);
-      console.log("Project added successfully!");
     })
     .catch((err: any) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while adding the new project.",
+          err.message || 'A server error occurred while adding the new project',
       });
     });
 };
 
+/**
+ * @swagger
+ * /projects:
+ *   get:
+ *     description: Use to get all projects of a user
+ *     produces: ['application/json']
+ *     parameters:
+ *       - name: title
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: userId
+ *         in: query
+ *         required: true
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Success response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Invalid UserId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Invalid UserId
+ *       500:
+ *         description: Server error response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A server error occurred while retrieving projects
+ */
 export const GetAll = (req: Request, res: Response) => {
   const title = req.query.title;
   const userId = req.query.userId;
 
-  const condition = title
+  if (!req.query.userId) {
+    res.status(400).send({ message: 'Invalid UserId' });
+    return;
+  }
+
+  const condition: any = title
     ? { title: title, userId: userId }
     : { userId: userId };
 
@@ -49,25 +162,61 @@ export const GetAll = (req: Request, res: Response) => {
     .then((data: Project[]) => {
       res.send(data);
     })
-    .catch((err: any) => {
+    .catch((error: Error) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving projects.",
+          error.message || 'A server error occurred while retrieving projects',
       });
     });
 };
 
-export const GetOne = (req: Request, res: Response) => {
+/**
+ * @swagger
+ * /projects/{id}:
+ *   get:
+ *     description: Use to get all projects of a user
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Success response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       500:
+ *         description: Server error response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Server error while getting project with id={id from path}
+ */
+export const GetOne = (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
+
+  console.log('req user id', req.userId);
 
   getRepository(Project)
     .findOne(id)
-    .then((data: any) => {
-      res.send(data);
+    .then((data: Project | undefined) => {
+      if(data) {
+        res.send(data);
+        next();
+      } else {
+        res.status(404).send('Could not find project with id=' + id);
+      }
     })
-    .catch((err: any) => {
+    .catch((err: Error) => {
       res.status(500).send({
-        message: "Error retrieving Project with id=" + id,
+        message:
+          err.message || 'Server error while getting project with id=' + id,
       });
     });
 };
@@ -78,7 +227,6 @@ export const GetScore = (req: Request, res: Response) => {
   getRepository(Appliance)
     .find({ where: { project: { id: projectId } } })
     .then((data: Appliance[]) => {
-
       const appliancesEnergyClasses: number[] = data.map(
         (appliance: Appliance) => appliance.energyClass
       );
@@ -98,7 +246,7 @@ export const GetScore = (req: Request, res: Response) => {
     .catch((err: any) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving appliances.",
+          err.message || 'Some error occurred while retrieving appliances.',
       });
     });
 };
@@ -111,7 +259,7 @@ export const Update = (req: Request, res: Response) => {
     .then((result: UpdateResult) => {
       if (result.affected === 1) {
         res.send({
-          message: "Project was updated successfully.",
+          message: 'Project was updated successfully.',
         });
       } else {
         res.send({
@@ -121,7 +269,7 @@ export const Update = (req: Request, res: Response) => {
     })
     .catch((err: any) => {
       res.status(500).send({
-        message: "Error updating Project with id=" + id,
+        message: 'Error updating Project with id=' + id,
       });
     });
 };
@@ -134,7 +282,7 @@ export const Delete = (req: Request, res: Response) => {
     .then((result: DeleteResult) => {
       if (result.affected === 1) {
         res.send({
-          message: "Project was deleted successfully!",
+          message: 'Project was deleted successfully!',
         });
       } else {
         res.send({
@@ -144,7 +292,7 @@ export const Delete = (req: Request, res: Response) => {
     })
     .catch((err: any) => {
       res.status(500).send({
-        message: "Could not delete Project with id=" + id,
+        message: 'Could not delete Project with id=' + id,
       });
     });
 };

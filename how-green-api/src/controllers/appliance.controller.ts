@@ -66,7 +66,7 @@ export const GetAll = (req: Request, res: Response) => {
   getRepository(Appliance)
     .find({ where: { project: { id: projectId } } })
     .then((data: any) => {
-      console.log("res data", data);
+      // console.log("res data", data);
       res.send(data);
     })
     .catch((err: any) => {

@@ -39,8 +39,8 @@ export class ProjectsListComponent implements OnInit {
         this.initCurrentProject();
 
       },
-      error: (error) => {
-        console.log(error);
+      error: (error: HttpErrorResponse) => {
+        console.log('[Projects Error] GetAll', error.message);
       }
     });
   }

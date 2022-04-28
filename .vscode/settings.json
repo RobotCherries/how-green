@@ -3,5 +3,9 @@
         "activityBar.background": "#45260F",
         "titleBar.activeBackground": "#603615",
         "titleBar.activeForeground": "#FDF9F6"
-    }
+    },
+    "cSpell.words": [
+        "Swal",
+        "sweetalert"
+    ]
 }

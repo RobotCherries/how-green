@@ -17,6 +17,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const storedAccessToken = JSON.parse(localStorage.getItem('accessToken'));
+    AuthInterceptor.accessToken = storedAccessToken;
+
     const req = request.clone({
       setHeaders: {
         Authorization: `Bearer ${AuthInterceptor.accessToken}`
@@ -27,11 +30,8 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log('err.status', err.status);
       if (err.status === 401 && !this.refresh) {
         this.refresh = true;
-        const currentUser = this.authService.userData;
-        // const isLoggedIn = currentUser && currentUser.token;
 
-
-        return this.httpClient.post(`${this.apiBaseUrl}/auth/refresh`, {}, {withCredentials: true}).pipe(
+        return this.httpClient.post(`${this.apiBaseUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
           switchMap((res: any) => {
             AuthInterceptor.accessToken = res.token;
             console.log('res.token', res.token);

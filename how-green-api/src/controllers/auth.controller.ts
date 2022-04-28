@@ -37,7 +37,7 @@ export const Login = async (req: Request, res: Response) => {
 
     const refreshToken = sign({
         id: user.id
-    }, "refresh_secret", {expiresIn: '1w'});
+    }, "refresh_secret", {expiresIn: '7d'});
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -55,7 +55,7 @@ export const Login = async (req: Request, res: Response) => {
 
     const token = sign({
         id: user.id
-    }, "access_secret", {expiresIn: '30s'});
+    }, "access_secret", {expiresIn: '7d'});
 
     res.send({
         token
@@ -63,6 +63,36 @@ export const Login = async (req: Request, res: Response) => {
 }
 
 export const AuthenticatedUser = async (req: Request, res: Response) => {
+    try {
+        const accessToken = req.header('Authorization')?.split(" ")[1] || "";
+
+        const payload: any = verify(accessToken, "access_secret");
+
+        if (!payload) {
+            return res.status(401).send({
+                message: 'unauthenticated'
+            });
+        }
+
+        const user = await getRepository(User).findOne(payload.id);
+
+        if (!user) {
+            return res.status(401).send({
+                message: 'unauthenticated'
+            });
+        }
+
+        const {password, ...data} = user;
+
+        res.send(data);
+    } catch (e) {
+        return res.status(401).send({
+            message: 'unauthenticated'
+        });
+    }
+}
+
+export const AuthorizedUser = async (req: Request, res: Response) => {
     try {
         const accessToken = req.header('Authorization')?.split(" ")[1] || "";
 
@@ -117,7 +147,7 @@ export const Refresh = async (req: Request, res: Response) => {
 
         const token = sign({
             id: payload.id
-        }, "access_secret", {expiresIn: '30s'});
+        }, "access_secret", {expiresIn: '7d'});
 
         res.send({
             token

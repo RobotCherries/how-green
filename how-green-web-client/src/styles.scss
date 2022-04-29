@@ -52,7 +52,7 @@ $utilities: map-merge(
 @import '~bootstrap/scss/bootstrap';
 
 
-input.mask-readonly-input:read-only {
+.mask-readonly-input:read-only {
   background: white;
   border: none;
   padding-left: 0;

@@ -62,15 +62,22 @@
         <div class="form-group" *ngIf="!isFormEditable">
           <label class="fw-bold">Overall Score</label>
           <input
+            *ngIf="project.score"
             type="text"
-            class="form-control mask-readonly-input text-muted fst-italic text-shadow"
+            class="form-control mask-readonly-input text-shadow fw-bold"
             [style.color]="(project.score | energyClassColor) + '!important'"
-            [class.fw-bold]="project.score"
             id="score"
             [ngModel]="project.score | energyClass"
             [readonly]="true"
             name="score"
           />
+
+          <p
+            *ngIf="!project.score"
+            class="form-control mask-readonly-input text-muted fst-italic mb-0"
+          >
+            Add at least one appliance to generate a project score
+          </p>
         </div>
 
         <div class="d-flex justify-content-between">

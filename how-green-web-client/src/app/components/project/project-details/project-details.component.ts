@@ -81,7 +81,7 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
         this.project.score = response.projectScore;
       },
       error: (error: HttpErrorResponse) => {
-        if(!error.error.message.includes('does not contain any appliances')) {
+        if (!error.error.message.includes('does not contain any appliances')) {
           this.projectStatus.type = 'error';
           this.projectStatus.message = error.error.message;
         }
@@ -120,12 +120,12 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
 
   deleteProject(): void {
     const confirmDelete = confirm(
-      'Are you sure you want to delete this project and all it\'s appliances? \nThis action cannot be undone.'
+      "Are you sure you want to delete this project and all it's appliances? \nThis action cannot be undone."
     );
 
     if (confirmDelete) {
       this.projectService.delete(this.project.id).subscribe({
-        next: (response) => {
+        next: (response: { message: string }) => {
           console.log(response);
           this.router.navigate(['/projects']);
         },
@@ -139,6 +139,24 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   }
 
   handleApplianceDelete(id: number): void {
-    this.applianceService.delete(this.routeProjectId, id);
+    console.log('delete id', id, this.routeProjectId);
+
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this appliance? \nThis action cannot be undone."
+    );
+
+    if (confirmDelete) {
+      this.applianceService.delete(this.routeProjectId, id).subscribe({
+        next: (response: { message: string }) => {
+          console.log(response);
+          this.getProjectAppliances(this.routeProjectId);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.projectStatus.type = 'danger';
+          this.projectStatus.message = error.error.message;
+          console.log(error);
+        },
+      });
+    }
   }
 }

@@ -12,7 +12,15 @@ import { EnergyClassFormOptions } from 'src/app/shared/maps/energy-class.map';
   styleUrls: ['./appliance-edit.component.scss']
 })
 export class ApplianceEditComponent implements OnInit {
-  appliance = {
+  appliance: IAppliance = {
+    name: '',
+    description: '',
+    energyClass: null,
+    energyConsumptionPerYear: null,
+    wattage: null,
+    projectId: null,
+  };
+  readonly originalAppliance: IAppliance = {
     name: '',
     description: '',
     energyClass: null,
@@ -22,6 +30,7 @@ export class ApplianceEditComponent implements OnInit {
   };
   energyClassOptions: IFormOption<EnergyClassEnum, string>[] = EnergyClassFormOptions;
   routeProjectId: number;
+  routeApplianceId: number;
   applianceStatus: { type: string, message: string } = { type: '', message: '' };
 
   isFormSubmitted = false;
@@ -35,11 +44,39 @@ export class ApplianceEditComponent implements OnInit {
   ngOnInit(): void {
     console.log('OI EnergyClassEnum', EnergyClassEnum.A);
     this.applianceStatus.message = '';
-    this.appliance.projectId = this.getRouteProjectId();
+    this.getRouteProjectId()
+    this.getRouteApplianceId()
+    this.getAppliance(this.routeProjectId, this.routeApplianceId);
   }
 
   getRouteProjectId(): void {
     this.routeProjectId = parseInt(this.route.snapshot.paramMap.get('id'));
+  }
+
+  getRouteApplianceId(): void {
+    this.routeApplianceId = parseInt(this.route.snapshot.paramMap.get('applianceId'));
+  }
+
+  getAppliance(projectId: number, id: number): void {
+    this.applianceService.getOne(projectId, id).subscribe({
+      next: (data: IAppliance) => {
+        this.appliance = data;
+
+        Object.assign(this.originalAppliance, data);
+        // this.originalAppliance.name = data.name;
+        // this.originalAppliance.description = data.description;
+        // this.originalAppliance.energyClass = data.energyClass;
+        // this.originalAppliance.energyConsumptionPerYear = data.energyConsumptionPerYear;
+        // this.originalAppliance.wattage = data.wattage;
+        // this.originalAppliance.projectId = data.projectId;
+        console.log(data);
+      },
+      error: (error) => {
+        this.applianceStatus.type = 'danger';
+        this.applianceStatus.message = error.error.message;
+        console.log(error);
+      },
+    });
   }
 
   save(applianceForm): void {
@@ -53,10 +90,10 @@ export class ApplianceEditComponent implements OnInit {
         projectId: this.appliance.projectId
       };
 
-      this.applianceService.create(this.routeProjectId, data).subscribe({
+      this.applianceService.update(this.routeProjectId, this.routeApplianceId, data).subscribe({
         next: (response) => {
           this.applianceStatus.type = 'success';
-          this.applianceStatus.message = 'The project was created successfully!';
+          this.applianceStatus.message = 'The appliance was updated successfully!';
           this.isFormSubmitted = true;
         },
         error: (error) => {
@@ -70,7 +107,7 @@ export class ApplianceEditComponent implements OnInit {
     }
   }
 
-  addMore(): void {
+  updateAgain(): void {
     this.isFormSubmitted = false;
     this.appliance = {
       name: null,

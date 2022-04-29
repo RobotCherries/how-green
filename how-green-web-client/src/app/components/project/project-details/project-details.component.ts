@@ -47,7 +47,7 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
     this.routeProjectId = parseInt(this.route.snapshot.paramMap.get('id'));
   }
 
-  getProject(id): void {
+  getProject(id: number): void {
     this.projectService.getOne(id).subscribe({
       next: (data) => {
         this.project = data;
@@ -119,7 +119,7 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
 
   deleteProject(): void {
     const confirmDelete = confirm(
-      'Are you sure you want to delete this project?'
+      'Are you sure you want to delete this project and all it\'s appliances? \nThis action cannot be undone.'
     );
 
     if (confirmDelete) {

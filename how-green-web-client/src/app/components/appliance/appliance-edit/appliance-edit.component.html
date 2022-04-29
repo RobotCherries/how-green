@@ -10,8 +10,16 @@
     <h4>Edit Appliance</h4>
 
     <div class="btn-group">
-      <button *ngIf="isFormSubmitted" class="btn btn-outline-primary" (click)="addMore()">Add more</button>
-      <button class="btn btn-outline-secondary" (click)="goBack()">Go back</button>
+      <button
+        *ngIf="isFormSubmitted"
+        class="btn btn-outline-primary"
+        (click)="updateAgain()"
+      >
+        Update again
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goBack()">
+        Go back
+      </button>
     </div>
   </div>
 
@@ -22,7 +30,12 @@
         <input
           type="text"
           class="form-control"
-          [class.is-valid]="name.valid"
+          [class.is-valid]="
+            name.valid &&
+            !name.pristine &&
+            name.value &&
+            name.value !== originalAppliance.name
+          "
           [class.is-invalid]="name.invalid && applianceForm.submitted"
           id="name"
           name="name"
@@ -31,7 +44,9 @@
           required
         />
 
-        <div *ngIf="!name.errors?.['required']" class="invalid-feedback">Please provide a valid name.</div>
+        <div *ngIf="!name.errors?.['required']" class="invalid-feedback">
+          Please provide a valid name.
+        </div>
       </div>
 
       <div class="form-group mb-3">
@@ -39,7 +54,12 @@
         <input
           type="text"
           class="form-control"
-          [class.is-valid]="description.valid && description.value"
+          [class.is-valid]="
+            description.valid &&
+            !description.pristine &&
+            description.value &&
+            description.value !== originalAppliance.description
+          "
           [class.is-invalid]="description.invalid && applianceForm.submitted"
           id="description"
           name="description"
@@ -52,27 +72,51 @@
       </div>
 
       <div class="form-group mb-3">
-        <label for="energyClass" class="fw-bold">Energy Efficiency Class*</label>
+        <label for="energyClass" class="fw-bold"
+          >Energy Efficiency Class*</label
+        >
 
         <select
           class="form-select"
-          [class.is-valid]="energyClass.valid && energyClass.value"
-          [class.is-invalid]="energyClass.value === null && applianceForm.submitted"
+          [class.is-valid]="
+            energyClass.valid &&
+            !energyClass.pristine &&
+            energyClass.value &&
+            energyClass.value !== originalAppliance.energyClass
+          "
+          [class.is-invalid]="
+            energyClass.value === null && applianceForm.submitted
+          "
           #energyClass="ngModel"
           [(ngModel)]="appliance.energyClass"
           name="energyClass"
         >
-          <option *ngFor="let option of energyClassOptions" [ngValue]="option.value">{{ option.label }}</option>
+          <option
+            *ngFor="let option of energyClassOptions"
+            [ngValue]="option.value"
+          >
+            {{ option.label }}
+          </option>
         </select>
       </div>
 
       <div class="form-group mb-3">
-        <label for="energyConsumptionPerYear" class="fw-bold">Energy Consumption Per Year</label>
+        <label for="energyConsumptionPerYear" class="fw-bold"
+          >Energy Consumption Per Year</label
+        >
         <input
           type="number"
           class="form-control"
-          [class.is-valid]="energyConsumptionPerYear.valid && energyConsumptionPerYear.value"
-          [class.is-invalid]="energyConsumptionPerYear.invalid && applianceForm.submitted"
+          [class.is-valid]="
+            energyConsumptionPerYear.valid &&
+            !energyConsumptionPerYear.pristine &&
+            energyConsumptionPerYear.value &&
+            energyConsumptionPerYear.value !==
+              originalAppliance.energyConsumptionPerYear
+          "
+          [class.is-invalid]="
+            energyConsumptionPerYear.invalid && applianceForm.submitted
+          "
           id="energyConsumptionPerYear"
           name="energyConsumptionPerYear"
           #energyConsumptionPerYear="ngModel"
@@ -86,7 +130,12 @@
         <input
           type="number"
           class="form-control"
-          [class.is-valid]="wattage.valid && wattage.value"
+          [class.is-valid]="
+            wattage.valid &&
+            !wattage.pristine &&
+            wattage.value &&
+            wattage.value !== originalAppliance.wattage
+          "
           [class.is-invalid]="wattage.invalid && applianceForm.submitted"
           id="wattage"
           name="wattage"
@@ -96,7 +145,9 @@
         />
       </div>
 
-      <button (click)="save(applianceForm)" class="btn btn-primary">Submit</button>
+      <button (click)="save(applianceForm)" class="btn btn-primary">
+        Submit
+      </button>
     </form>
   </div>
 </div>

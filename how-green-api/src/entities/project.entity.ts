@@ -13,7 +13,7 @@ import { User } from './user.entity';
  *           description: Project id
  *           example: 1
  *         userId:
- *           type: number
+ *           type: integer
  *           description: Id of the user who created the project
  *           example: 2
  *         title:
@@ -48,11 +48,11 @@ export class Project {
     @Column()
     title!: string;
 
-    @Column()
+    @Column({ nullable: true })
     description!: string;
 
     @Column({ nullable: true })
-    score?: number;
+    score!: number;
 
     @CreateDateColumn()
     createdAt!: Date;

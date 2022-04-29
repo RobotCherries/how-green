@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from 'express';
-import { DeleteResult, getRepository, UpdateResult } from 'typeorm';
-import { Appliance } from '../entities/appliance.entity';
-import { Project } from '../entities/project.entity';
+import { NextFunction, Request, Response } from "express";
+import { DeleteResult, getRepository, UpdateResult } from "typeorm";
+import { Appliance } from "../entities/appliance.entity";
+import { Project } from "../entities/project.entity";
 
 /**
  * @swagger
  * /projects:
  *   post:
- *     description: Use to create a new project for the current user
+ *     description: Use to create a new project (owned by current user)
  *     produces: ['application/json']
  *     requestBody:
  *       required: true
@@ -33,7 +33,7 @@ import { Project } from '../entities/project.entity';
  *                 description: Project energy class score (from 0 meaning A++, the best energy class to 7 meaning F, the worst energy class)
  *                 example: 1
  *     responses:
- *       200:
+ *       201:
  *         description: Success response
  *         content:
  *           application/json:
@@ -58,22 +58,18 @@ import { Project } from '../entities/project.entity';
  *               properties:
  *                 message:
  *                   type: string
- *                   description: A server error occurred while adding the new project
+ *                   description: A server error occurred while adding the new project (owned by current user)
  */
 export const Create = (req: Request, res: Response) => {
-  if (!req.body.title) {
-    res.status(400).send({
-      message: 'Invalid Title',
+  if (!req.body.title)
+    return res.status(400).send({
+      message: "Invalid Title",
     });
-    return;
-  }
 
-  if (!req.body.userId) {
-    res.status(400).send({
-      message: 'Invalid Id',
+  if (!req.body.userId)
+    return res.status(400).send({
+      message: "Invalid Id",
     });
-    return;
-  }
 
   getRepository(Project)
     .createQueryBuilder()
@@ -90,10 +86,10 @@ export const Create = (req: Request, res: Response) => {
     .then((data) => {
       res.status(201).send(data);
     })
-    .catch((err: any) => {
+    .catch((err: Error) => {
       res.status(500).send({
         message:
-          err.message || 'A server error occurred while adding the new project',
+          err.message || "A server error occurred while adding the new project",
       });
     });
 };
@@ -102,7 +98,7 @@ export const Create = (req: Request, res: Response) => {
  * @swagger
  * /projects:
  *   get:
- *     description: Use to get all projects owned by the current user
+ *     description: Use to get all projects (owned by current user)
  *     produces: ['application/json']
  *     parameters:
  *       - name: title
@@ -141,16 +137,14 @@ export const Create = (req: Request, res: Response) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: A server error occurred while retrieving projects
+ *                   description: A server error occurred while retrieving projects (owned by current user)
  */
 export const GetAll = (req: Request, res: Response) => {
   const title = req.query.title;
   const userId = req.query.userId;
 
-  if (!req.query.userId) {
-    res.status(400).send({ message: 'Invalid UserId' });
-    return;
-  }
+  if (!req.query.userId)
+    return res.status(400).send({ message: "Invalid UserId" });
 
   const condition: any = title
     ? { title: title, userId: userId }
@@ -159,12 +153,12 @@ export const GetAll = (req: Request, res: Response) => {
   getRepository(Project)
     .find({ where: condition })
     .then((data: Project[]) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error: Error) => {
       res.status(500).send({
         message:
-          error.message || 'A server error occurred while retrieving projects',
+          error.message || "A server error occurred while retrieving projects",
       });
     });
 };
@@ -173,7 +167,7 @@ export const GetAll = (req: Request, res: Response) => {
  * @swagger
  * /projects/{id}:
  *   get:
- *     description: Use to get a specific project owned by the current user
+ *     description: Use to get a given project (owned by current user)
  *     parameters:
  *       - name: id
  *         in: path
@@ -186,6 +180,16 @@ export const GetAll = (req: Request, res: Response) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Project not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Could not find given project (owned by current user)
  *       500:
  *         description: Server error response
  *         content:
@@ -195,26 +199,26 @@ export const GetAll = (req: Request, res: Response) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Server error occurred while getting project with id={id from path}
+ *                   description: Server error occurred while retrieving given project (owned by current user)
  */
 export const GetOne = (req: Request, res: Response, next: NextFunction) => {
-  const id = JSON.parse(req.params.id);
+  const id = parseInt(req.params.id);
 
   getRepository(Project)
     .findOne(id)
     .then((data: Project | undefined) => {
       if (data) {
-        res.send(data);
+        res.status(200).send(data);
         next();
       } else {
-        res.status(404).send('Could not find project with id=' + id);
+        res.status(404).send("Could not find project with id=" + id);
       }
     })
     .catch((err: Error) => {
       res.status(500).send({
         message:
           err.message ||
-          'Server error occurred while getting project with id=' + id,
+          "Server error occurred while getting project with id=" + id,
       });
     });
 };
@@ -223,7 +227,7 @@ export const GetOne = (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /projects/{id}/score:
  *   get:
- *     description: Use to get the score of a specific project owned by the current user
+ *     description: Use to get the score of a given project (owned by current user)
  *     parameters:
  *       - name: id
  *         in: path
@@ -241,6 +245,16 @@ export const GetOne = (req: Request, res: Response, next: NextFunction) => {
  *                   type: number
  *                   description: Project energy class score (from 0 meaning A++, the best energy class to 7 meaning F, the worst energy class)
  *                   example: 1
+ *       404:
+ *         description: Project not found (score)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Could not find given project (owned by current user) in order to retrieve energy class score
  *       500:
  *         description: Server error response
  *         content:
@@ -250,10 +264,10 @@ export const GetOne = (req: Request, res: Response, next: NextFunction) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Server error occurred while retrieving project score
+ *                   description: Server error occurred while retrieving given project score (owned by current user)
  */
 export const GetScore = (req: Request, res: Response) => {
-  const projectId = JSON.parse(req.params.id);
+  const projectId: number = parseInt(req.params.id);
 
   getRepository(Project)
     .find({ where: { userId: req.userId } })
@@ -265,11 +279,10 @@ export const GetScore = (req: Request, res: Response) => {
         getRepository(Appliance)
           .find({ where: { projectId: projectId } })
           .then((appliances: Appliance[]) => {
-            if(appliances?.length === 0) {
+            if (appliances?.length === 0)
               return res.status(400).send({
-                message: `Error while calculating project's energy class score, project with id=${projectId} does not contain any appliances`
+                message: `Error while calculating project's energy class score, project with id=${projectId} does not contain any appliances`,
               });
-            }
 
             const appliancesEnergyClasses: number[] = appliances.map(
               (appliance: Appliance) => appliance.energyClass
@@ -285,28 +298,28 @@ export const GetScore = (req: Request, res: Response) => {
 
             const projectScore = getMedian(appliancesEnergyClasses);
 
-            if(projectScore) {
+            if (projectScore) {
               res.status(200).send({ projectScore });
             }
-
           })
-          .catch((err: any) => {
+          .catch((err: Error) => {
             res.status(500).send({
               message:
                 err.message ||
-                'Server error occurred while retrieving project score',
+                "Server error occurred while retrieving project score",
             });
           });
       } else {
         res.status(404).send({
-          message: 'You do not own any projects with the id=' + projectId
-        })
+          message: "Could not find project with id=" + projectId,
+        });
       }
     })
     .catch((err: Error) => {
       res.status(500).send({
         message:
-          err.message || 'Server error occurred while verifying project ownership (for project score)',
+          err.message ||
+          "Server error occurred while verifying project ownership (for project score)",
       });
     });
 };
@@ -315,7 +328,7 @@ export const GetScore = (req: Request, res: Response) => {
  * @swagger
  * /projects/{id}:
  *   put:
- *     description: Use to update a specific project owned by the current user
+ *     description: Use to update a given project (owned by current user)
  *     parameters:
  *       - name: id
  *         in: path
@@ -356,7 +369,17 @@ export const GetScore = (req: Request, res: Response) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Could not update project with id=${id} (project not found or request body was empty)
+ *                   description: Could not update given project (owned by current user) (project not found or request body was empty)
+ *       404:
+ *         description: Project not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Could not find given project (owned by current user)
  *       500:
  *         description: Server error response
  *         content:
@@ -368,24 +391,27 @@ export const GetScore = (req: Request, res: Response) => {
  *                   type: string
  *                   description: Server error while updating project
  */
-export const Update = (req: Request, res: Response) => {
-  const id = JSON.parse(req.params.id);
+export const Update = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
 
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Invalid project body',
+  if (!req.body)
+    return res.status(400).send({
+      message: "Invalid project body",
     });
-    return;
-  }
 
-  // TODO: check for 404
+  const project = await getRepository(Project).findOne({ where: { id: id, userId: req.userId } });
+
+  if(!project)
+    return res.status(404).send({
+      message: "Could not find project with id=" + id
+    });
 
   getRepository(Project)
     .update(id, req.body)
     .then((result: UpdateResult) => {
       if (result.affected === 1) {
         res.status(200).send({
-          message: 'Project updated successfully',
+          message: "Project updated successfully",
         });
       } else {
         res.status(400).send({
@@ -393,9 +419,10 @@ export const Update = (req: Request, res: Response) => {
         });
       }
     })
-    .catch((err: any) => {
+    .catch((err: Error) => {
       res.status(500).send({
-        message: err.message || 'Server error while updating project with id=' + id,
+        message:
+          err.message || "Server error while updating project with id=" + id,
       });
     });
 };
@@ -404,7 +431,7 @@ export const Update = (req: Request, res: Response) => {
  * @swagger
  * /projects/{id}:
  *   delete:
- *     description: Use to delete a specific project owned by the current user
+ *     description: Use to delete a given project (owned by current user)
  *     parameters:
  *       - name: id
  *         in: path
@@ -421,8 +448,8 @@ export const Update = (req: Request, res: Response) => {
  *                 message:
  *                   type: string
  *                   description: Project deleted successfully
- *       400:
- *         description: Invalid request body or project id
+ *       404:
+ *         description: Project not found
  *         content:
  *           application/json:
  *             schema:
@@ -430,7 +457,7 @@ export const Update = (req: Request, res: Response) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Could not delete project with id=${id} (project not found)
+ *                   description: Could not delete given project (owned by current user) (project not found)
  *       500:
  *         description: Server error response
  *         content:
@@ -440,29 +467,36 @@ export const Update = (req: Request, res: Response) => {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Server error while deleting project
+ *                   description: Server error while deleting project (owned by current user)
  */
-export const Delete = (req: Request, res: Response) => {
-  const id = JSON.parse(req.params.id);
+export const Delete = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
 
-  // TODO: check for 404
+  const project = await getRepository(Project).findOne({ where: { id: id, userId: req.userId } });
+
+  if(!project)
+    return res.status(404).send({
+      message: "Could not find project with id=" + id
+    });
+
 
   getRepository(Project)
     .delete(id)
     .then((result: DeleteResult) => {
       if (result.affected === 1) {
         res.status(200).send({
-          message: 'Project deleted successfully',
+          message: "Project deleted successfully",
         });
       } else {
-        res.status(400).send({
+        res.status(404).send({
           message: `Could not delete project with id=${id} (project not found)`,
         });
       }
     })
-    .catch((err: any) => {
+    .catch((err: Error) => {
       res.status(500).send({
-        message: err.message || 'Server error while deleting project with id=' + id,
+        message:
+          err.message || "Server error while deleting project with id=" + id,
       });
     });
 };

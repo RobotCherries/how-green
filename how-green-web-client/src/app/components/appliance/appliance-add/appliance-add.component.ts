@@ -34,6 +34,7 @@ export class ApplianceAddComponent implements OnInit {
   ngOnInit(): void {
     console.log('OI EnergyClassEnum', EnergyClassEnum.A);
     this.applianceStatus.message = '';
+    this.getRouteProjectId();
   }
 
   getRouteProjectId(): void {
@@ -49,6 +50,8 @@ export class ApplianceAddComponent implements OnInit {
         energyConsumptionPerYear: this.appliance.energyConsumptionPerYear,
         wattage: this.appliance.wattage
       };
+
+      console.log(this.routeProjectId);
 
       this.applianceService.create(this.routeProjectId, data).subscribe({
         next: (response) => {

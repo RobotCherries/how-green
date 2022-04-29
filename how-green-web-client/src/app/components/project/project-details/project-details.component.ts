@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
@@ -31,8 +32,6 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getUserData().subscribe();
-
     this.projectStatus.message = '';
     this.getRouteProjectId();
     this.getProject(this.routeProjectId);
@@ -77,13 +76,15 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
 
   getProjectScore(id: number): void {
     this.projectService.getScore(id).subscribe({
-      next: (response: any) => {
+      next: (response: { projectScore: number }) => {
         console.log(response);
         this.project.score = response.projectScore;
       },
-      error: (error) => {
-        this.projectStatus.type = 'danger';
-        this.projectStatus.message = error.error.message;
+      error: (error: HttpErrorResponse) => {
+        if(!error.error.message.includes('does not contain any appliances')) {
+          this.projectStatus.type = 'error';
+          this.projectStatus.message = error.error.message;
+        }
       },
     });
   }
@@ -95,13 +96,13 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
     }))(this.project);
 
     this.projectService.update(this.project.id, editedProject).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: (data: IProject) => {
+        console.log(data);
         this.projectStatus.type = 'success';
         this.projectStatus.message = 'The project was updated successfully!';
         this.isFormEditable = false;
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         this.projectStatus.type = 'danger';
         this.projectStatus.message = error.error.message;
       },
@@ -128,7 +129,7 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
           console.log(response);
           this.router.navigate(['/projects']);
         },
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           this.projectStatus.type = 'danger';
           this.projectStatus.message = error.error.message;
           console.log(error);

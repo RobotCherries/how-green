@@ -95,6 +95,7 @@ export class ApplianceEditComponent implements OnInit {
           this.applianceStatus.type = 'success';
           this.applianceStatus.message = 'The appliance was updated successfully!';
           this.isFormSubmitted = true;
+          setTimeout(() => this.goBack(), 1500);
         },
         error: (error) => {
           this.applianceStatus.type = 'danger';
@@ -105,18 +106,6 @@ export class ApplianceEditComponent implements OnInit {
       this.applianceStatus.type = 'warning';
       this.applianceStatus.message = 'Please fill all the * required fields!';
     }
-  }
-
-  updateAgain(): void {
-    this.isFormSubmitted = false;
-    this.appliance = {
-      name: null,
-      description: null,
-      energyClass: null,
-      energyConsumptionPerYear: null,
-      wattage: null,
-      projectId: this.routeProjectId
-    };
   }
 
   goBack(): void {

@@ -242,7 +242,7 @@ export const GetAll = async (req: Request, res: Response) => {
  */
 export const GetOne = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
-  const applianceId = JSON.parse(req.params.applianceId);
+  const applianceId: number = parseInt(req.params.applianceId);
 
   const project = await getRepository(Project).findOne({
     where: { id: projectId, userId: req.userId },
@@ -360,7 +360,7 @@ export const GetOne = async (req: Request, res: Response) => {
  */
 export const Update = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
-  const applianceId = JSON.parse(req.params.applianceId);
+  const applianceId: number = parseInt(req.params.applianceId);
 
   if (!req.body) return res.status(400).send("Empty request body");
 

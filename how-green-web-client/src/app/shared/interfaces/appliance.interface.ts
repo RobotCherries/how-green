@@ -1,7 +1,7 @@
 
 export interface IAppliance {
   id?: number;
-  projectId: number;
+  projectId?: number;
   name: string;
   description?: string;
   energyClass: number;

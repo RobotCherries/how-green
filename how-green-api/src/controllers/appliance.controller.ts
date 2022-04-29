@@ -6,7 +6,7 @@ import {
   UpdateResult
 } from "typeorm";
 import { Appliance } from "../entities/appliance.entity";
-import { Project } from './../entities/project.entity';
+import { Project } from "./../entities/project.entity";
 
 /**
  * @swagger
@@ -170,11 +170,13 @@ export const Create = (req: Request, res: Response) => {
 export const GetAll = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
 
-  const project = await getRepository(Project).findOne({ where: { id: projectId, userId: req.userId } });
+  const project = await getRepository(Project).findOne({
+    where: { id: projectId, userId: req.userId },
+  });
 
-  if(!project)
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + projectId
+      message: "Could not find project with id=" + projectId,
     });
 
   getRepository(Appliance)
@@ -242,11 +244,13 @@ export const GetOne = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
   const applianceId = JSON.parse(req.params.applianceId);
 
-  const project = await getRepository(Project).findOne({ where: { id: projectId, userId: req.userId } });
+  const project = await getRepository(Project).findOne({
+    where: { id: projectId, userId: req.userId },
+  });
 
-  if(!project)
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + projectId
+      message: "Could not find project with id=" + projectId,
     });
 
   getRepository(Appliance)
@@ -360,10 +364,12 @@ export const Update = async (req: Request, res: Response) => {
 
   if (!req.body) return res.status(400).send("Empty request body");
 
-  const project = await getRepository(Project).findOne({ where: { id: projectId, userId: req.userId } });
-  if(!project)
+  const project = await getRepository(Project).findOne({
+    where: { id: projectId, userId: req.userId },
+  });
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + projectId
+      message: "Could not find project with id=" + projectId,
     });
 
   getRepository(Appliance)
@@ -438,11 +444,13 @@ export const Delete = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.id);
   const applianceId: number = parseInt(req.params.applianceId);
 
-  const project = await getRepository(Project).findOne({ where: { id: projectId, userId: req.userId } });
+  const project = await getRepository(Project).findOne({
+    where: { id: projectId, userId: req.userId },
+  });
 
-  if(!project)
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + projectId
+      message: "Could not find project with id=" + projectId,
     });
 
   getRepository(Appliance)

@@ -399,11 +399,13 @@ export const Update = async (req: Request, res: Response) => {
       message: "Invalid project body",
     });
 
-  const project = await getRepository(Project).findOne({ where: { id: id, userId: req.userId } });
+  const project = await getRepository(Project).findOne({
+    where: { id: id, userId: req.userId },
+  });
 
-  if(!project)
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + id
+      message: "Could not find project with id=" + id,
     });
 
   getRepository(Project)
@@ -472,13 +474,14 @@ export const Update = async (req: Request, res: Response) => {
 export const Delete = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
 
-  const project = await getRepository(Project).findOne({ where: { id: id, userId: req.userId } });
+  const project = await getRepository(Project).findOne({
+    where: { id: id, userId: req.userId },
+  });
 
-  if(!project)
+  if (!project)
     return res.status(404).send({
-      message: "Could not find project with id=" + id
+      message: "Could not find project with id=" + id,
     });
-
 
   getRepository(Project)
     .delete(id)

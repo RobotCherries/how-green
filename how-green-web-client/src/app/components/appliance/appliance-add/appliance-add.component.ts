@@ -12,13 +12,12 @@ import { ApplianceService } from './../../../services/appliance.service';
   styleUrls: ['./appliance-add.component.scss']
 })
 export class ApplianceAddComponent implements OnInit {
-  appliance = {
+  appliance: IAppliance = {
     name: '',
     description: '',
     energyClass: null,
     energyConsumptionPerYear: null,
-    wattage: null,
-    projectId: null,
+    wattage: null
   };
   energyClassOptions: IFormOption<EnergyClassEnum, string>[] = EnergyClassFormOptions;
   routeProjectId: number;
@@ -35,7 +34,6 @@ export class ApplianceAddComponent implements OnInit {
   ngOnInit(): void {
     console.log('OI EnergyClassEnum', EnergyClassEnum.A);
     this.applianceStatus.message = '';
-    this.appliance.projectId = this.getRouteProjectId();
   }
 
   getRouteProjectId(): void {
@@ -49,8 +47,7 @@ export class ApplianceAddComponent implements OnInit {
         description: this.appliance.description,
         energyClass: this.appliance.energyClass,
         energyConsumptionPerYear: this.appliance.energyConsumptionPerYear,
-        wattage: this.appliance.wattage,
-        projectId: this.appliance.projectId
+        wattage: this.appliance.wattage
       };
 
       this.applianceService.create(this.routeProjectId, data).subscribe({
@@ -77,8 +74,7 @@ export class ApplianceAddComponent implements OnInit {
       description: null,
       energyClass: null,
       energyConsumptionPerYear: null,
-      wattage: null,
-      projectId: this.routeProjectId
+      wattage: null
     };
   }
 

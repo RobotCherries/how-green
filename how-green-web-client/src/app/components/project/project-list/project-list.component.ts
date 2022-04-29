@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/core/auth/services/auth/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { IProjectSearchCriteria } from 'src/app/shared/interfaces/project-search-criteria.interface';
 import { IProject } from 'src/app/shared/interfaces/project.interface';
+import { IUser } from './../../../shared/interfaces/user.interface';
 
 @Component({
   selector: 'hg-project-list',
@@ -22,10 +23,13 @@ export class ProjectsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllProjects(this.getUserId());
+    this.authService.getUserData().subscribe((user: IUser) => {
+      this.getAllProjects(user.id);
+
+    });
   }
 
-  private getUserId(): number {
+  getUserId(): number {
     return this.authService.userData.value.id;
   }
 

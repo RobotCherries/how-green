@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
 import { IUser } from './../../../../shared/interfaces/user.interface';
@@ -41,19 +41,21 @@ constructor(
         localStorage.setItem('accessToken', JSON.stringify(res.token));
 
         this.isUserLoggedIn.next(true);
-        this.getUserData();
+        this.getUserData().subscribe();
 
         this.router.navigate(['/']);
       });
   }
 
-  getUserData(): void {
-    this.httpClient
+  getUserData(): Observable<IUser> {
+    return this.httpClient
       .get(`${apiBaseUrl}/auth/user`, { withCredentials: true })
-      .subscribe((data: IUser) => {
-        localStorage.setItem('userData', JSON.stringify(data));
-        this.userData.next(data);
-      });
+      .pipe(map((user: IUser) => {
+        localStorage.setItem('userData', JSON.stringify(user));
+        this.userData.next(user);
+
+        return user;
+      }));
   }
 
   refreshUserState(): void {

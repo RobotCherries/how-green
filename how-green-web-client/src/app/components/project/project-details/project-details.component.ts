@@ -31,7 +31,7 @@ export class ProjectDetailsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getUserData();
+    this.authService.getUserData().subscribe();
 
     this.projectStatus.message = '';
     this.getRouteProjectId();

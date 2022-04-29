@@ -32,7 +32,7 @@
             [class.list-group-item-primary]="i == currentIndex"
             (click)="setActiveProject(project, i)"
           >
-            <div class="ms-2 me-auto">{{ project?.id }}. {{ project?.title }}</div>
+            <div class="ms-2 me-auto">{{ project?.title }}</div>
             <span
               class="badge rounded-pill text-shadow"
               [style.background-color]="project?.score | energyClassColor"

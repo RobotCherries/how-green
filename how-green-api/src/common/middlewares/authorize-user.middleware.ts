@@ -11,31 +11,27 @@ export const AuthorizeUser = async (
   try {
     const accessToken = req.header("Authorization")?.split(" ")[1] || "";
 
-    console.log('------------------------ accessToken ------------------------');
-    console.log('accessToken', accessToken);
-    console.log('------------------------ ----------- ------------------------');
+    console.log("accessToken", accessToken);
     const payload: any = verify(accessToken, "access_secret");
 
-    if (!payload) {
+    if (!payload)
       return res.status(403).send({
         message: "unauthorized",
       });
-    }
 
     const user = await getRepository(User).findOne(payload.id);
 
-    if (!user) {
+    if (!user)
       return res.status(404).send({
         message: "user_not_found",
       });
-    }
-      
+
     req.userId = user.id;
 
     next();
   } catch (e) {
     return res.status(401).send({
-      message: "invalid_token",
+      message: "unauthenticated",
     });
   }
 };
